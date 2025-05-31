@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5549496774941192759}
   - component: {fileID: 4741538418732295521}
+  - component: {fileID: 6121126072297856982}
   - component: {fileID: 2456786383261353548}
-  m_Layer: 0
-  m_Name: Projectile
+  m_Layer: 7
+  m_Name: Basic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4255148775523345274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -76,13 +77,39 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_DrawMode: 1
+  m_Size: {x: 0.5, y: 0.1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &6121126072297856982
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4255148775523345274}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 0.5, y: 0.1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 1
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.1}
+  m_EdgeRadius: 0
 --- !u!114 &2456786383261353548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,5 +122,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3bc741cdf61e340b2999b77c0aa57a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerWeapon: {fileID: 0}
+  cam: {fileID: 0}
+  weaponType: 0
   weaponStats: {fileID: 11400000, guid: 05a93cbda3d30054ab042228a255b3c9, type: 2}
+  isPrimary: 0
   velocity: {x: 0, y: 0}
+  currentDamage: 0
+  currentRange: 0
+  isColliding: 0
+  isOffScreen: 0
+  isActive: 0
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1280
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  maxBounceIncrement: 0

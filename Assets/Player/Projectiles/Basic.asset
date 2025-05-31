@@ -12,6 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8d07ed2f79eb3a4680b6aa6e4f68ea1, type: 3}
   m_Name: Basic
   m_EditorClassIdentifier: 
-  damage: 2
-  fireCooldown: 0.1
+  damage: 4
+  fireCooldown: 0.133333
   projectileSpeed: 15
+  isPiercing: 0
+  projectileCount: 1
+  range: Infinity
+  offsetList:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0.05}
+  - {x: 0, y: 0}
+  - {x: 0, y: -0.05}
+  angleVarianceList:
+  - 0
+  instanceCount: 20
