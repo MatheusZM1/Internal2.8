@@ -27,6 +27,9 @@ public class ProjectileBehaviour : MonoBehaviour
     public float currentDamage;
     public float currentRange;
 
+    [Header("Pierce")]
+    public float currentPierceCooldown;
+
     [Header("Ray check")]
     public bool isColliding;
     public bool isOffScreen;
@@ -55,12 +58,26 @@ public class ProjectileBehaviour : MonoBehaviour
         transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Update projectile position
         currentRange -= velocity.magnitude * Time.fixedDeltaTime;
 
+        if (currentPierceCooldown > 0)
+        {
+            currentPierceCooldown -= Time.fixedDeltaTime;
+            if (currentPierceCooldown <= 0)
+            {
+                bc.enabled = true;
+            }
+        }
+
         if (isColliding)
         {
             if (!weaponStats.isPiercing)
             {
                 DeActivate();
                 return;
+            }
+            else
+            {
+                bc.enabled = false;
+                currentPierceCooldown = weaponStats.pierceCooldown;
             }
         }
         if (isOffScreen)

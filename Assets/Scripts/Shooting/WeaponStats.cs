@@ -7,7 +7,10 @@ public class WeaponStats : ScriptableObject
     public float damage;
     public float fireCooldown;
     public float projectileSpeed;
+
+    [Header("Pierce")]
     public bool isPiercing;
+    public float pierceCooldown;
 
     [Header("Projectiles")]
     public int projectileCount;

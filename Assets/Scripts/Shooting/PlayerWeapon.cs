@@ -51,11 +51,11 @@ public class PlayerWeapon : MonoBehaviour
     private void Update()
     {
         if (fireCooldown > 0) fireCooldown -= Time.deltaTime;
-        if ((Input.GetKey("a") || inputScript.GetActionHold("RTrigger")) && fireCooldown <= 0)
+        if ((Input.GetKey("a") && !playerScript.isPlayerTwo) || inputScript.GetActionHold("RTrigger"))
         {
-            Shoot();
+            if (fireCooldown <= 0) Shoot();
         }
-        if (Input.GetKeyDown("s") || inputScript.GetActionDown("LBumper")) primaryWeaponSelected = !primaryWeaponSelected;
+        if ((Input.GetKeyDown("s") && !playerScript.isPlayerTwo) || inputScript.GetActionDown("LBumper")) primaryWeaponSelected = !primaryWeaponSelected;
     }
 
     private void Shoot()

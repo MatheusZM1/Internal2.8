@@ -41,3 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: B2
+    uniqueID: 1062561225
+    locked: 0
+  - name: B1
+    uniqueID: 2633226619
+    locked: 0
+  - name: Player
+    uniqueID: 1680476581
+    locked: 0
+  - name: F1 - Terrain
+    uniqueID: 884649825
+    locked: 0
+  - name: F2 - Projectiles
+    uniqueID: 2655096507
+    locked: 0

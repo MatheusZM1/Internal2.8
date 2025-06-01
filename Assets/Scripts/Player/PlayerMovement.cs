@@ -321,6 +321,8 @@ public class PlayerMovement : MonoBehaviour
             }
 
             StopSquishSprite();
+            Vector2 targetSquish = new Vector2(1.2f, 0.8f);
+            jumpSquishCoroutine = StartCoroutine(SquishSprite(targetSquish, 4f));
         }
     }
 
