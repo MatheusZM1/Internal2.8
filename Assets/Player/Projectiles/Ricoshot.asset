@@ -16,10 +16,11 @@ MonoBehaviour:
   fireCooldown: 0.2
   projectileSpeed: 10
   isPiercing: 0
+  pierceCooldown: 0
   projectileCount: 1
   range: 15
   offsetList:
-  - {x: 0, y: 0}
+  - {x: 0.375, y: 0}
   angleVarianceList:
   - 0
   instanceCount: 15

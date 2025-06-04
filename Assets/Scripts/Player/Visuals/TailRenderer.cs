@@ -1,11 +1,13 @@
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
 public class TailRenderer : MonoBehaviour
 {
     [Header("Tail Joint Transforms")]
     public List<Transform> tailJoints;
+    public int updRate;
 
     [Header("Line Renderer Settings")]
     public float startWidth = 0.5f;
@@ -25,10 +27,9 @@ public class TailRenderer : MonoBehaviour
         lineRenderer.useWorldSpace = true;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        if (tailJoints == null || tailJoints.Count < 2)
-            return;
+        if (tailJoints == null || tailJoints.Count < 2) return;
 
         smoothPoints.Clear();
 

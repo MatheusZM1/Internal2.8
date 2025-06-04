@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Projectile
+  - PlayerTwo
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Ground
   - OneWayGround
   - Boundary
-  - 
+  - Void
   - Enemy
   - Hurt
   - 
@@ -55,4 +57,7 @@ TagManager:
     locked: 0
   - name: F2 - Projectiles
     uniqueID: 2655096507
+    locked: 0
+  - name: F3 - HUD
+    uniqueID: 1313040563
     locked: 0

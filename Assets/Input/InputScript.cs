@@ -24,6 +24,48 @@ public class InputScript : MonoBehaviour
     {
         inputActions = new InputActions();
 
+        AssignController();
+    }
+
+    private void OnEnable()
+    {
+        InputSystem.onDeviceChange += OnDeviceChange;
+
+        inputActions.Player.Enable();
+
+        RegisterAction(inputActions.Player.SouthButton, "SouthB");
+        RegisterAction(inputActions.Player.NorthButton, "NorthB");
+        RegisterAction(inputActions.Player.EastButton, "EastB");
+        RegisterAction(inputActions.Player.WestButton, "WestB");
+        RegisterAction(inputActions.Player.Pause, "Pause");
+        RegisterAction(inputActions.Player.RBumper, "RBumper");
+        RegisterAction(inputActions.Player.LBumper, "LBumper");
+        RegisterAction(inputActions.Player.RTrigger, "RTrigger");
+        RegisterAction(inputActions.Player.LTrigger, "LTrigger");
+    }
+    void OnDisable()
+    {
+        InputSystem.onDeviceChange -= OnDeviceChange;
+    }
+
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (device is Gamepad)
+        {
+            switch (change)
+            {
+                case InputDeviceChange.Added:
+                    AssignController();
+                    break;
+                case InputDeviceChange.Reconnected:
+                    AssignController();
+                    break;
+            }
+        }
+    }
+
+    void AssignController()
+    {
         // Get gamepads
         var gamepads = Gamepad.all;
 
@@ -41,21 +83,6 @@ public class InputScript : MonoBehaviour
             inputUser = InputUser.PerformPairingWithDevice(assignedGamepad);
             inputUser.AssociateActionsWithUser(inputActions);
         }
-    }
-
-    private void OnEnable()
-    {
-        inputActions.Player.Enable();
-
-        RegisterAction(inputActions.Player.SouthButton, "SouthB");
-        RegisterAction(inputActions.Player.NorthButton, "NorthB");
-        RegisterAction(inputActions.Player.EastButton, "EastB");
-        RegisterAction(inputActions.Player.WestButton, "WestB");
-        RegisterAction(inputActions.Player.Pause, "Pause");
-        RegisterAction(inputActions.Player.RBumper, "RBumper");
-        RegisterAction(inputActions.Player.LBumper, "LBumper");
-        RegisterAction(inputActions.Player.RTrigger, "RTrigger");
-        RegisterAction(inputActions.Player.LTrigger, "LTrigger");
     }
 
     private void Update()

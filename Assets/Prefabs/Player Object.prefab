@@ -28,7 +28,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 798324663199231208}
-  - {fileID: 5130172240284470067}
   m_Father: {fileID: 798324663465640456}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -82,7 +81,7 @@ MonoBehaviour:
   distance: 0.175
   smoothing: 0.2
   updRate: 300
-  gravity: 2
+  gravity: 1
   groundMask:
     serializedVersion: 2
     m_Bits: 768
@@ -382,6 +381,7 @@ MonoBehaviour:
   - {fileID: 798324663123270439}
   - {fileID: 798324663104456730}
   - {fileID: 798324663569812310}
+  updRate: 300
   startWidth: 0.5
   endWidth: 0.15
   tailMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
@@ -576,8 +576,9 @@ Transform:
   m_GameObject: {fileID: 798324663199231211}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.25, z: 0}
-  m_LocalScale: {x: 0.8, y: 1, z: 1}
-  m_Children: []
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5130172240284470067}
   m_Father: {fileID: 798324662780189135}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -625,8 +626,8 @@ SpriteRenderer:
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_DrawMode: 1
+  m_Size: {x: 0.8, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -682,7 +683,7 @@ MonoBehaviour:
   distance: 0.175
   smoothing: 0.2
   updRate: 300
-  gravity: 2
+  gravity: 1
   groundMask:
     serializedVersion: 2
     m_Bits: 768
@@ -732,9 +733,10 @@ GameObject:
   - component: {fileID: 798324663569170538}
   - component: {fileID: 798324663569170529}
   - component: {fileID: 798324663569170541}
+  - component: {fileID: 5944095857703607110}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -763,7 +765,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -806,6 +808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerTwo: 0
+  inputLockedCooldown: 0
   horizontal: 0
   vertical: 0
   horizontalPositiveKey: right
@@ -813,6 +816,7 @@ MonoBehaviour:
   verticalPositiveKey: up
   verticalNegativeKey: down
   directionFacing: {x: 0, y: 0}
+  isAlive: 0
   speed: 5.25
   maxFallSpeed: -30
   gravity: 50
@@ -830,6 +834,9 @@ MonoBehaviour:
   boundaryMask:
     serializedVersion: 2
     m_Bits: 1024
+  voidMask:
+    serializedVersion: 2
+    m_Bits: 2048
   isJumping: 0
   jumpForce: 16
   jumpBufferTimerPreset: 0.03
@@ -841,9 +848,17 @@ MonoBehaviour:
   dashCooldown: 0.1
   parryTimeLeft: 0
   parryDuration: 0
+  touchingOtherPlayer: 0
+  reviveTimer: 0
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 64
   isLocked: 0
   spriteObj: {fileID: 798324662780189135}
-  bodyObj: {fileID: 798324663199231208}
+  bodyObj: {fileID: 798324663199231209}
+  leftEye: {fileID: 5271090615525923149}
+  rightEye: {fileID: 3346033058946458267}
+  tail: {fileID: 798324662985913954}
 --- !u!114 &798324663569170541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,6 +877,25 @@ MonoBehaviour:
   fireCooldown: 0
   primaryOffsetIndex: 0
   secondaryOffsetIndex: 0
+--- !u!114 &5944095857703607110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798324663569170528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbe8f79a9757a244ab68afe0d046178c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  invulnarabilityDuration: 2
+  hurtMask:
+    serializedVersion: 2
+    m_Bits: 12288
+  healthScript: {fileID: 0}
+  healthText: {fileID: 0}
 --- !u!1 &798324663569812329
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,7 +1028,7 @@ MonoBehaviour:
   distance: 0.175
   smoothing: 0.2
   updRate: 300
-  gravity: 2
+  gravity: 1
   groundMask:
     serializedVersion: 2
     m_Bits: 768
@@ -1023,13 +1057,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1206659490055444612}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5813868699029260203}
   - {fileID: 28155376173377716}
-  m_Father: {fileID: 798324662780189135}
-  m_RootOrder: 1
+  m_Father: {fileID: 798324663199231208}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5909940280897445013
 MonoBehaviour:
@@ -1048,21 +1082,9 @@ MonoBehaviour:
   leftEye: {fileID: 5813868699029260203}
   rightEye: {fileID: 28155376173377716}
   speed: 15
-  facingRightPos:
-  - {x: -0.025, y: -0.05}
-  - {x: 0.2, y: -0.05}
-  facingUpRightPos:
-  - {x: -0.025, y: 0.05}
-  - {x: 0.2, y: 0.05}
-  facingDownRightPos:
-  - {x: -0.025, y: -0.15}
-  - {x: 0.2, y: -0.15}
-  facingUpPos:
-  - {x: -0.1125, y: 0.07}
-  - {x: 0.1125, y: 0.07}
-  facingDownPos:
-  - {x: -0.1125, y: -0.17}
-  - {x: 0.1125, y: -0.17}
+  xOffset: 0.0875
+  yOffset: 0.12
+  defaultEyePos: {x: 0.1125, y: -0.05}
 --- !u!1 &3591764576722775027
 GameObject:
   m_ObjectHideFlags: 0

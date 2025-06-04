@@ -51,6 +51,9 @@ public class PlayerWeapon : MonoBehaviour
     private void Update()
     {
         if (fireCooldown > 0) fireCooldown -= Time.deltaTime;
+
+        if (!playerScript.isAlive || playerScript.inputLockedCooldown > 0) return;
+
         if ((Input.GetKey("a") && !playerScript.isPlayerTwo) || inputScript.GetActionHold("RTrigger"))
         {
             if (fireCooldown <= 0) Shoot();

@@ -35,7 +35,6 @@ public class ProjectileBehaviour : MonoBehaviour
     public bool isOffScreen;
     public bool isActive;
     public LayerMask groundMask;
-    public LayerMask enemyMask;
 
     [Header("Rico")]
     public int maxBounceIncrement;
@@ -87,7 +86,7 @@ public class ProjectileBehaviour : MonoBehaviour
             return;
         }
 
-        isColliding = Physics2D.OverlapBox(transform.position, bc.size, transform.eulerAngles.z, groundMask | enemyMask);
+        isColliding = Physics2D.OverlapBox(transform.position, bc.size, transform.eulerAngles.z, groundMask);
 
         switch (weaponType)
         {
@@ -103,6 +102,20 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         if (weaponType == WeaponType.rico && currentRange > 0) return;
         if (isActive) isOffScreen = true;
+    }
+
+    public void CollideWithEnemy()
+    {
+        if (!weaponStats.isPiercing)
+        {
+            DeActivate();
+            return;
+        }
+        else
+        {
+            bc.enabled = false;
+            currentPierceCooldown = weaponStats.pierceCooldown;
+        }
     }
 
     void DeActivate()
@@ -144,7 +157,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     void RicoBehaviour()
     {
-        isColliding = Physics2D.OverlapCircle(transform.position, bc.size.x * 0.5f, enemyMask);
+        isColliding = false;
 
         RaycastHit2D horizontalRay = Physics2D.Raycast(transform.position, Vector2.right * Mathf.Sign(velocity.x), Mathf.Abs(velocity.x) * Time.fixedDeltaTime + bc.size.x * 0.51f, groundMask);
         RaycastHit2D verticalRay = Physics2D.Raycast(transform.position, Vector2.up * Mathf.Sign(velocity.y), Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.x * 0.51f, groundMask);

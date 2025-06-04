@@ -9,8 +9,11 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Input")]
     public bool isPlayerTwo;
+    public float inputLockedCooldown;
     public float horizontal;
     public float vertical;
+
+    [Header("Binds")]
     public string horizontalPositiveKey;
     public string horizontalNegativeKey;
     public string verticalPositiveKey;
@@ -21,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 directionFacing;
 
     [Header("Variables")]
+    public bool isAlive;
     public float speed;
     public float maxFallSpeed;
     public float gravity;
@@ -34,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask solidGroundMask;
     public LayerMask semiSolidGroundMask;
     public LayerMask boundaryMask;
+    public LayerMask voidMask;
 
     [Header("Jumping")]
     public bool isJumping;
@@ -56,14 +61,27 @@ public class PlayerMovement : MonoBehaviour
     public float parryTimeLeft;
     public float parryDuration;
 
+    [Header("Reviving")]
+    public bool touchingOtherPlayer;
+    public float reviveTimer;
+    public LayerMask playerMask;
+    PlayerMovement otherPlayerScript;
+
     [Header("Lock")]
     public bool isLocked;
 
     [Header("Sprite")]
     public Transform spriteObj;
-    public Transform bodyObj;
-    Vector2 spriteStartScale;
-    Coroutine jumpSquishCoroutine;
+    public SpriteRenderer bodyObj;
+    public SpriteRenderer leftEye, rightEye;
+    public LineRenderer tail;
+
+    Vector2 bodyStartScale;
+    Coroutine bodySquishCoroutine;
+
+    Vector2 eyeStartScale;
+    Coroutine eyeSquishCoroutine;
+
     Vector2 previousPosition;
     Vector2 currentPosition;
 
@@ -78,7 +96,29 @@ public class PlayerMovement : MonoBehaviour
 
         directionFacing.x = 1;
 
-        spriteStartScale = bodyObj.transform.localScale;
+        bodyStartScale = bodyObj.size;
+        eyeStartScale = leftEye.transform.localScale;
+
+        isAlive = true;
+
+        if (isPlayerTwo)
+        {
+            otherPlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+        }
+        else
+        {
+            otherPlayerScript = GameObject.FindGameObjectWithTag("PlayerTwo").GetComponent<PlayerMovement>();
+        }
+    }
+
+    private void OnEnable()
+    {
+        Actions.levelReset += Respawn;
+    }
+
+    private void OnDisable()
+    {
+        Actions.levelReset -= Respawn;
     }
 
     float GetCustomAxis(string positiveKey, string negativeKey)
@@ -102,36 +142,58 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        horizontal = GetHorizontal();
-        vertical = GetVertical();
-
         if (Input.GetKeyDown("1"))
         {
             Time.timeScale = 1f;
         }
         if (Input.GetKeyDown("2"))
         {
-            Time.timeScale = 0.5f;
+            Time.timeScale = 1f / 300f;
         }
         if (Input.GetKeyDown("3"))
         {
             Time.timeScale = 0.2f;
         }
-
-        directionFacing.y = vertical;
-
-        if (isGrounded && !isDashing)
+        if (Input.GetKeyDown("return") || inputScript.GetActionDown("Pause"))
         {
-            isLocked = (Input.GetKey("left ctrl") && !isPlayerTwo) || inputScript.GetActionHold("RBumper");
+            Actions.levelReset?.Invoke();
+        }
+
+        if (isAlive)
+        {
+            if (inputLockedCooldown <= 0)
+            {
+                horizontal = GetHorizontal();
+                vertical = GetVertical();
+            }
+            else
+            {
+                horizontal = 0;
+                vertical = 0;
+                inputLockedCooldown -= Time.deltaTime;
+            }
+
+            directionFacing.y = vertical;
+
+            if (isGrounded && !isDashing)
+            {
+                isLocked = (Input.GetKey("left ctrl") && !isPlayerTwo) || inputScript.GetActionHold("EastB");
+            }
+            else
+            {
+                isLocked = false;
+            }
+
+            Jump();
+            Dash();
+            Parry();
+            //Revive();
         }
         else
         {
-            isLocked = false;
+            horizontal = 0;
+            vertical = 0;
         }
-
-        Jump();
-        Dash();
-        Parry();
     }
 
     private void LateUpdate()
@@ -142,6 +204,15 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void FixedUpdate()
+    {
+        HandlePhysics();
+
+        // Update previous and current positions (used for smoothly interpolating player sprite)
+        previousPosition = currentPosition;
+        currentPosition = transform.position;
+    }
+
+    void HandlePhysics()
     {
         if (!isLocked) transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Move
 
@@ -177,7 +248,6 @@ public class PlayerMovement : MonoBehaviour
 
             if (rayToUse.collider != null)
             {
-                transform.position = new Vector2(rayToUse.point.x + bc.size.x * 0.5f, transform.position.y);
                 velocity.x = 0;
             }
         }
@@ -207,8 +277,8 @@ public class PlayerMovement : MonoBehaviour
             if (velocity.y >= 0) // Check for ceiling while rising
             {
                 float rayLength = Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.y * 0.5f;
-                RaycastHit2D ceilingAboveLeft = Physics2D.Raycast(transform.position - Vector3.right * bc.size.x * 0.49f, Vector2.up, rayLength, solidGroundMask);
-                RaycastHit2D ceilingAboveRight = Physics2D.Raycast(transform.position + Vector3.right * bc.size.x * 0.49f, Vector2.up, rayLength, solidGroundMask);
+                RaycastHit2D ceilingAboveLeft = Physics2D.Raycast(transform.position - Vector3.right * bc.size.x * 0.49f, Vector2.up, rayLength, solidGroundMask | boundaryMask);
+                RaycastHit2D ceilingAboveRight = Physics2D.Raycast(transform.position + Vector3.right * bc.size.x * 0.49f, Vector2.up, rayLength, solidGroundMask | boundaryMask);
                 RaycastHit2D rayToUse = ceilingAboveLeft;
 
                 if ((ceilingAboveRight.collider != null && ceilingAboveRight.distance < ceilingAboveLeft.distance) || ceilingAboveLeft.collider == null) rayToUse = ceilingAboveRight;
@@ -221,9 +291,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        float grounRayLength = Mathf.Max(0.15f, Mathf.Abs(velocity.y) * Time.fixedDeltaTime);
-        RaycastHit2D groundedLeft = Physics2D.Raycast(transform.position + new Vector3(-bc.size.x * 0.49f, -bc.size.y * 0.45f), Vector2.down, grounRayLength, groundMask);
-        RaycastHit2D groundedRight = Physics2D.Raycast(transform.position + new Vector3(bc.size.x * 0.49f, -bc.size.y * 0.45f), Vector2.down, grounRayLength, groundMask);
+        float groundRayLength = Mathf.Max(0.15f, Mathf.Abs(velocity.y) * Time.fixedDeltaTime);
+        RaycastHit2D groundedLeft = Physics2D.Raycast(transform.position + new Vector3(-bc.size.x * 0.49f, -bc.size.y * 0.45f), Vector2.down, groundRayLength, groundMask);
+        RaycastHit2D groundedRight = Physics2D.Raycast(transform.position + new Vector3(bc.size.x * 0.49f, -bc.size.y * 0.45f), Vector2.down, groundRayLength, groundMask);
 
         if (groundedLeft.collider != null || groundedRight.collider != null) // Check for ground
         {
@@ -243,9 +313,15 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = false;
         }
 
-        // Update previous and current positions (used for smoothly interpolating player sprite)
-        previousPosition = currentPosition;
-        currentPosition = transform.position;
+        RaycastHit2D voidBelow = Physics2D.Raycast(transform.position, Vector2.down, groundRayLength, voidMask);
+
+        if (voidBelow.collider != null)
+        {
+            GetComponent<PlayerHP>().TakeDamage(1, false);
+            isJumping = false;
+            CancelDash();
+            velocity = new Vector2(velocity.x, 22f);
+        }
     }
 
     private void BecomeGrounded()
@@ -255,11 +331,11 @@ public class PlayerMovement : MonoBehaviour
         coyoteTimer = coyoteTimerPreset;
         canDash = true;
 
-        if (velocity.y < -2f)
+        if (velocity.y < -2f && isAlive)
         {
-            StopSquishSprite();
+            StopSquishBody();
             Vector2 targetSquish = new Vector2(1.1f, 1f);
-            jumpSquishCoroutine = StartCoroutine(SquishSprite(targetSquish, 8f));
+            bodySquishCoroutine = StartCoroutine(SquishBody(targetSquish, 8f));
         }
     }
 
@@ -269,7 +345,7 @@ public class PlayerMovement : MonoBehaviour
 
         if ((Input.GetKeyDown("space") && !isPlayerTwo) || inputScript.GetActionDown("SouthB"))
         {
-            if (!isDashing) jumpBufferTimer = jumpBufferTimerPreset;
+            if (!isDashing && inputLockedCooldown <= 0) jumpBufferTimer = jumpBufferTimerPreset;
         }
 
         if (coyoteTimer > 0 && jumpBufferTimer > 0)
@@ -289,9 +365,9 @@ public class PlayerMovement : MonoBehaviour
                 isJumping = true;
                 jumpBufferTimer = 0;
                 coyoteTimer = 0;
-                StopSquishSprite();
+                StopSquishBody();
                 Vector2 targetSquish = new Vector2(0.85f, 1.15f);
-                jumpSquishCoroutine = StartCoroutine(SquishSprite(targetSquish, 2f));
+                bodySquishCoroutine = StartCoroutine(SquishBody(targetSquish, 2f));
             }
         }
 
@@ -313,34 +389,65 @@ public class PlayerMovement : MonoBehaviour
         }
         else if ((Input.GetKeyDown("left shift") && !isPlayerTwo) || inputScript.GetActionDown("WestB"))
         {
-            if (!isDashing && canDash) // Dash
+            if (!isDashing && canDash && inputLockedCooldown <= 0) // Dash
             {
                 isDashing = true;
                 canDash = false;
                 currentDashTimer = dashTime;
             }
 
-            StopSquishSprite();
+            StopSquishBody();
             Vector2 targetSquish = new Vector2(1.2f, 0.8f);
-            jumpSquishCoroutine = StartCoroutine(SquishSprite(targetSquish, 4f));
+            bodySquishCoroutine = StartCoroutine(SquishBody(targetSquish, 4f));
         }
+    }
+
+    public void CancelDash()
+    {
+        isDashing = false;
+        currentDashCooldown = 0;
     }
 
     private void Parry()
     {
-        if ((Input.GetKeyDown("w") && !isPlayerTwo)) // Parry
+        if ((Input.GetKeyDown("w") && !isPlayerTwo) && inputLockedCooldown <= 0) // Parry
         {
 
         }
     }
 
-    void StopSquishSprite()
+    private void Revive()
     {
-        if (jumpSquishCoroutine != null) StopCoroutine(jumpSquishCoroutine);
-        bodyObj.transform.localScale = spriteStartScale;
+        if (touchingOtherPlayer)
+        {
+            if ((Input.GetKeyDown("w") || inputScript.GetActionDown("NorthB")) && inputLockedCooldown <= 0)
+            {
+                reviveTimer += Time.deltaTime;
+
+                if (reviveTimer >= 1)
+                {
+                    otherPlayerScript.Respawn();
+                }
+            }
+            else
+            {
+                reviveTimer = 0;
+            }
+        }
+        else
+        {
+            reviveTimer = 0;
+        }
     }
 
-    IEnumerator SquishSprite(Vector2 targetSquish, float squishSpeed)
+    void StopSquishBody()
+    {
+        if (bodySquishCoroutine != null) StopCoroutine(bodySquishCoroutine);
+        bodyObj.size = bodyStartScale;
+        bodyObj.transform.localPosition = new Vector2(0, -0.25f);
+    }
+
+    IEnumerator SquishBody(Vector2 targetSquish, float squishSpeed)
     {
         Vector2 squishFactor = targetSquish;
         float t = 0;
@@ -348,12 +455,83 @@ public class PlayerMovement : MonoBehaviour
         while (t < 1)
         {
             t += Time.deltaTime * squishSpeed;
-            Vector2 currentSquish = Vector2.Lerp(spriteStartScale, spriteStartScale * squishFactor, MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
-            bodyObj.transform.localScale = new Vector3(currentSquish.x, currentSquish.y, 1);
+            Vector2 currentSquish = Vector2.Lerp(bodyStartScale, bodyStartScale * squishFactor, MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
+            bodyObj.size = new Vector2(currentSquish.x, currentSquish.y);
 
             yield return null;
         }
-        bodyObj.transform.localScale = spriteStartScale;
+        bodyObj.size = bodyStartScale;
+        bodyObj.transform.localPosition = new Vector2(0, -0.25f);
     }
 
+    public void StartSquishEyes(Vector2 targetSquish, float squishSpeed)
+    {
+        StopSquishEyes();
+        eyeSquishCoroutine = StartCoroutine(SquishEyes(targetSquish, squishSpeed));
+    }
+
+    void StopSquishEyes()
+    {
+        if (eyeSquishCoroutine != null) StopCoroutine(eyeSquishCoroutine);
+        leftEye.transform.localScale = eyeStartScale;
+        rightEye.transform.localScale = eyeStartScale;
+    }
+
+    IEnumerator SquishEyes(Vector2 targetSquish, float squishSpeed)
+    {
+        Vector2 squishFactor = targetSquish;
+        float t = 0;
+
+        while (t < 1)
+        {
+            t += Time.deltaTime * squishSpeed;
+            Vector2 currentSquish = Vector2.Lerp(eyeStartScale, eyeStartScale * squishFactor, MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
+            leftEye.transform.localScale = new Vector2(currentSquish.x, currentSquish.y);
+            rightEye.transform.localScale = new Vector2(currentSquish.x, currentSquish.y);
+
+            leftEye.color = Color.Lerp(Color.white, new Color(1, 0.3f, 0.3f), MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
+            rightEye.color = Color.Lerp(Color.white, new Color(1, 0.3f, 0.3f), MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
+
+            yield return null;
+        }
+        leftEye.transform.localScale = eyeStartScale;
+        rightEye.transform.localScale = eyeStartScale;
+    }
+
+    public void StartDeath()
+    {
+        StopSquishBody();
+        StartCoroutine(Die());
+    }
+
+    IEnumerator Die()
+    {
+        float t = 0;
+
+        while (t < 1)
+        {
+            t += Time.deltaTime * 3;
+            bodyObj.transform.localPosition = Vector2.Lerp(Vector2.up * -0.25f, new Vector2(0, -0.35f), MathFunctions.EaseIn(t, 2));
+            bodyObj.transform.eulerAngles = Vector3.forward * Mathf.Lerp(0, -90 * directionFacing.x, MathFunctions.EaseIn(t, 2));
+            bodyObj.color = Color.Lerp(Color.black, new Color(0.5f, 0f, 0f), MathFunctions.EaseIn(t, 2));
+            tail.startColor = bodyObj.color;
+            tail.endColor = bodyObj.color;
+
+            yield return null;
+        }
+    }
+
+    public void Respawn()
+    {
+        isAlive = true;
+        GetComponent<PlayerHP>().UpdateHeath(3);
+
+        bodyObj.transform.localPosition = Vector2.up * -0.25f;
+        bodyObj.transform.eulerAngles = Vector3.zero;
+        bodyObj.color = Color.black;
+        tail.startColor = bodyObj.color;
+        tail.endColor = bodyObj.color;
+
+        transform.position = Vector3.zero;
+    }
 }
