@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(InputScript))]
 public class PlayerMovement : MonoBehaviour
 {
+    PlayerHP healthScript;
     BoxCollider2D bc;
 
     [Header("Input")]
@@ -89,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
     {
         inputScript = GetComponent<InputScript>();
 
+        healthScript = GetComponent<PlayerHP>();
         bc = GetComponent<BoxCollider2D>();
 
         previousPosition = transform.position;
@@ -154,10 +156,17 @@ public class PlayerMovement : MonoBehaviour
         {
             Time.timeScale = 0.2f;
         }
-        if (Input.GetKeyDown("return") || inputScript.GetActionDown("Pause"))
+        if ((Input.GetKeyDown("return") && !isPlayerTwo) || inputScript.GetActionDown("Pause"))
+        {
+            GameManagerScript.instance.PauseGame();
+        }
+
+        if (Input.GetKeyDown("r"))
         {
             Actions.levelReset?.Invoke();
         }
+
+        if (GameManagerScript.instance.gamePaused) return;
 
         if (isAlive)
         {
@@ -200,7 +209,8 @@ public class PlayerMovement : MonoBehaviour
     {
         float interpolationFactor = (Time.time - Time.fixedTime) / Time.fixedDeltaTime; // Interpolate sprite position between previous and current position
         Vector2 interpolatedPosition = Vector2.Lerp(previousPosition, currentPosition, interpolationFactor);
-        spriteObj.transform.position = interpolatedPosition + Vector2.up * 0.3f;
+        spriteObj.transform.position = interpolatedPosition + Vector2.up * 0.3125f;
+        spriteObj.transform.position = new Vector2(Mathf.Round(spriteObj.transform.position.x * 32f) / 32f, Mathf.Round(spriteObj.transform.position.y * 32f) / 32f);
     }
 
     private void FixedUpdate()
@@ -216,7 +226,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isLocked) transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Move
 
-        velocity.x = horizontal * speed; // x Speed
+        velocity.x = Mathf.Ceil(horizontal) * speed; // x Speed
 
         if (isDashing) // Dash movement
         {
@@ -277,8 +287,8 @@ public class PlayerMovement : MonoBehaviour
             if (velocity.y >= 0) // Check for ceiling while rising
             {
                 float rayLength = Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.y * 0.5f;
-                RaycastHit2D ceilingAboveLeft = Physics2D.Raycast(transform.position - Vector3.right * bc.size.x * 0.49f, Vector2.up, rayLength, solidGroundMask | boundaryMask);
-                RaycastHit2D ceilingAboveRight = Physics2D.Raycast(transform.position + Vector3.right * bc.size.x * 0.49f, Vector2.up, rayLength, solidGroundMask | boundaryMask);
+                RaycastHit2D ceilingAboveLeft = Physics2D.Raycast(transform.position - Vector3.right * bc.size.x * 0.49f, Vector2.up, rayLength, solidGroundMask);
+                RaycastHit2D ceilingAboveRight = Physics2D.Raycast(transform.position + Vector3.right * bc.size.x * 0.49f, Vector2.up, rayLength, solidGroundMask);
                 RaycastHit2D rayToUse = ceilingAboveLeft;
 
                 if ((ceilingAboveRight.collider != null && ceilingAboveRight.distance < ceilingAboveLeft.distance) || ceilingAboveLeft.collider == null) rayToUse = ceilingAboveRight;
@@ -317,10 +327,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (voidBelow.collider != null)
         {
-            GetComponent<PlayerHP>().TakeDamage(1, false);
-            isJumping = false;
-            CancelDash();
-            velocity = new Vector2(velocity.x, 22f);
+            healthScript.TakeDamage(1, false);
+            if (healthScript.health > 0)
+            {
+                isJumping = false;
+                CancelDash();
+                velocity = new Vector2(velocity.x, 22f);
+            }
         }
     }
 
@@ -354,7 +367,8 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit2D semiSolidGroundRight = Physics2D.Raycast(transform.position + new Vector3(bc.size.x * 0.49f, -bc.size.y * 0.45f), Vector2.down, 0.15f, semiSolidGroundMask);
             if ((semiSolidGroundLeft.collider != null || semiSolidGroundRight.collider != null) && vertical < 0) // Descend semi solid platform
             {
-                velocity.y = -4.75f;
+                transform.position += Vector3.up * -0.05f;
+                velocity.y = -3f;
                 isJumping = true;
                 jumpBufferTimer = 0;
                 coyoteTimer = 0;
@@ -394,11 +408,11 @@ public class PlayerMovement : MonoBehaviour
                 isDashing = true;
                 canDash = false;
                 currentDashTimer = dashTime;
-            }
 
-            StopSquishBody();
-            Vector2 targetSquish = new Vector2(1.2f, 0.8f);
-            bodySquishCoroutine = StartCoroutine(SquishBody(targetSquish, 4f));
+                StopSquishBody();
+                Vector2 targetSquish = new Vector2(1.2f, 0.8f);
+                bodySquishCoroutine = StartCoroutine(SquishBody(targetSquish, 4f));
+            }
         }
     }
 

@@ -9,6 +9,8 @@ public class EyeBehaviour : MonoBehaviour
     public Vector2 currentDirectionFacing;
 
     [Header("Eyes")]
+    public Transform eyesContainer;
+    public Vector2 eyesContainerPos;
     public Transform leftEye;
     public Transform rightEye;
 
@@ -28,17 +30,17 @@ public class EyeBehaviour : MonoBehaviour
         {
             direction = Vector2.up * playerScript.directionFacing.y;
         }
-        MoveEye(leftEye, new Vector2(-defaultEyePos.x, defaultEyePos.y) + new Vector2(xOffset, yOffset) * direction);
-        MoveEye(rightEye, defaultEyePos + new Vector2(xOffset, yOffset) * direction);
+
+        eyesContainerPos = MoveEye(eyesContainerPos, new Vector2(0, 0.25f) + new Vector2(xOffset, yOffset) * direction);
+        eyesContainer.transform.localPosition = new Vector2(Mathf.Round(eyesContainerPos.x * 32f) / 32f, Mathf.Round(eyesContainerPos.y * 32f) / 32f);
     }
 
-    void MoveEye(Transform targetEye, Vector2 targetPos)
+    Vector2 MoveEye(Vector2 referencePos, Vector2 targetPos)
     {
-        Vector2 currentPos = targetEye.localPosition;
+        Vector2 currentPos = referencePos;
 
         if (Vector2.Distance(currentPos, targetPos) > threshold)
         {
-            // Eased movement using Lerp with Time.deltaTime-based interpolation
             // This creates an ease-out effect
             Vector2 newPos = Vector2.Lerp(currentPos, targetPos, 1f - Mathf.Exp(-speed * Time.deltaTime));
 
@@ -48,11 +50,11 @@ public class EyeBehaviour : MonoBehaviour
                 newPos = targetPos;
             }
 
-            targetEye.localPosition = newPos;
+            return newPos;
         }
         else
         {
-            targetEye.localPosition = targetPos; // Snap to exact target
+            return targetPos; // Snap to exact target
         }
     }
 }

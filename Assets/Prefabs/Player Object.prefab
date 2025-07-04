@@ -779,7 +779,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 0.9}
+  m_Size: {x: 0.71875, y: 0.875}
   m_EdgeRadius: 0
 --- !u!114 &798324663569170538
 MonoBehaviour:
@@ -871,7 +871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81dafef576cf4ad48a2b6cd823cc71a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  primaryBulletPrefab: {fileID: 3920266606466288036, guid: 994b12bf57714c548964f9a99b32ecc8, type: 3}
+  primaryBulletPrefab: {fileID: 2456786383261353548, guid: 49ce4fe499e8c3b4bae524573462d40e, type: 3}
   secondaryBulletPrefab: {fileID: 647876728633091983, guid: 6a21eb9276484f34680291c62077f498, type: 3}
   primaryWeaponSelected: 0
   fireCooldown: 0
@@ -896,6 +896,8 @@ MonoBehaviour:
     m_Bits: 12288
   healthScript: {fileID: 0}
   healthText: {fileID: 0}
+  playerSprite: {fileID: 798324662780189121}
+  playerTail: {fileID: 798324662985913954}
 --- !u!1 &798324663569812329
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,6 +1081,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerScript: {fileID: 798324663569170529}
   currentDirectionFacing: {x: 0, y: 0}
+  eyesContainer: {fileID: 5130172240284470067}
+  eyesContainerPos: {x: 0, y: 0}
   leftEye: {fileID: 5813868699029260203}
   rightEye: {fileID: 28155376173377716}
   speed: 15
@@ -1110,7 +1114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3591764576722775027}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1125, y: -0.05, z: 0}
+  m_LocalPosition: {x: 0.125, y: -0.0625, z: 0}
   m_LocalScale: {x: 0.15625, y: 0.15625, z: 1}
   m_Children: []
   m_Father: {fileID: 5130172240284470067}
@@ -1192,7 +1196,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5213515131166103442}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.1125, y: -0.05, z: 0}
+  m_LocalPosition: {x: -0.125, y: -0.0625, z: 0}
   m_LocalScale: {x: 0.15625, y: 0.15625, z: 1}
   m_Children: []
   m_Father: {fileID: 5130172240284470067}

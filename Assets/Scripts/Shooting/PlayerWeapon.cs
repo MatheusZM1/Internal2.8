@@ -50,6 +50,8 @@ public class PlayerWeapon : MonoBehaviour
 
     private void Update()
     {
+        if (GameManagerScript.instance.gamePaused) return;
+
         if (fireCooldown > 0) fireCooldown -= Time.deltaTime;
 
         if (!playerScript.isAlive || playerScript.inputLockedCooldown > 0) return;
@@ -89,17 +91,17 @@ public class PlayerWeapon : MonoBehaviour
             // Set bullet velocity based on player's facing direction
             if (playerScript.directionFacing.y == 0)
             {
-                newBullet.SetVelocity(playerScript.directionFacing, offsetIndex);
+                newBullet.SetVelocity(playerScript.directionFacing, offsetIndex); // Shoot horizontally
             }
             else
             {
                 if (playerScript.horizontal == 0)
                 {
-                    newBullet.SetVelocity(new Vector2(0, playerScript.directionFacing.y), offsetIndex);
+                    newBullet.SetVelocity(new Vector2(0, playerScript.directionFacing.y), offsetIndex, playerScript.directionFacing.x < 0 ? true : false); // Shoot vertically
                 }
                 else
                 {
-                    newBullet.SetVelocity(new Vector2(playerScript.horizontal, playerScript.directionFacing.y), offsetIndex);
+                    newBullet.SetVelocity(new Vector2(playerScript.horizontal, playerScript.directionFacing.y), offsetIndex); // Shoot diagonally
                 }
             }
 

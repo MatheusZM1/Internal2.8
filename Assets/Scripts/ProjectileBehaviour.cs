@@ -5,7 +5,6 @@ using UnityEngine;
 public class ProjectileBehaviour : MonoBehaviour
 {
     public PlayerWeapon playerWeapon;
-    public CameraBehaviour cam;
 
     public enum WeaponType
     {
@@ -36,8 +35,13 @@ public class ProjectileBehaviour : MonoBehaviour
     public bool isActive;
     public LayerMask groundMask;
 
+    [Header("Visuals")]
+    public Transform spriteTransform;
+
     [Header("Rico")]
-    public int maxBounceIncrement;
+    public float spriteRotationDelay;
+    float currentSpriteRotationDelay;
+    int maxBounceIncrement;
 
 
     private void Awake()
@@ -45,9 +49,14 @@ public class ProjectileBehaviour : MonoBehaviour
         bc = GetComponent<BoxCollider2D>();
     }
 
-    private void Start()
+    private void Update()
     {
-        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraBehaviour>();
+        switch (weaponType)
+        {
+            case WeaponType.rico:
+                RicoBehaviour();
+                break;
+        }
     }
 
     private void FixedUpdate()
@@ -91,7 +100,7 @@ public class ProjectileBehaviour : MonoBehaviour
         switch (weaponType)
         {
             case WeaponType.rico:
-                RicoBehaviour();
+                RicoBehaviourFixed();
                 break;
         }
 
@@ -131,7 +140,7 @@ public class ProjectileBehaviour : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SetVelocity(Vector2 direction, int offsetIndex)
+    public void SetVelocity(Vector2 direction, int offsetIndex, bool flipY = false)
     {
         isActive = true;
 
@@ -139,6 +148,7 @@ public class ProjectileBehaviour : MonoBehaviour
         velocity = Quaternion.Euler(0, 0, weaponStats.angleVarianceList[offsetIndex % weaponStats.angleVarianceList.Length]) * velocity; // Modify projectile direction based on variance index
 
         float angle = Mathf.Round(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+        if (flipY) transform.localScale = new Vector3(1, -1, 1);
         UpdateSpriteAngle();
 
         transform.position += Quaternion.Euler(0, 0, angle) * weaponStats.offsetList[offsetIndex];
@@ -153,9 +163,27 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         Vector2 direction = velocity.normalized;
         transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+        if (!Mathf.Approximately(direction.x, 0))
+        {
+            transform.localScale = new Vector3(1 * Mathf.Sign(direction.x), 1, 1);
+            if (direction.x < 0)
+            {
+                transform.eulerAngles += new Vector3(0, 0, 180);
+            }
+        }
     }
 
     void RicoBehaviour()
+    {
+        currentSpriteRotationDelay -= Time.deltaTime;
+        if (currentSpriteRotationDelay < 0)
+        {
+            currentSpriteRotationDelay = spriteRotationDelay;
+            spriteTransform.eulerAngles -= new Vector3(0, 0, 45 * Mathf.Sign(transform.localScale.x));
+        }
+    }
+
+    void RicoBehaviourFixed()
     {
         isColliding = false;
 
@@ -166,7 +194,7 @@ public class ProjectileBehaviour : MonoBehaviour
         {
             if (horizontalRay.collider != null)
             {
-                StartCoroutine(RicoBounce(0, (horizontalRay.distance - 0.1f) * Mathf.Sign(velocity.x)));
+                StartCoroutine(RicoBounce(0, (horizontalRay.distance - bc.size.x * 0.5f) * Mathf.Sign(velocity.x)));
             }
         }
 
@@ -174,7 +202,7 @@ public class ProjectileBehaviour : MonoBehaviour
         {
             if (verticalRay.collider != null)
             {
-                StartCoroutine(RicoBounce(1, (verticalRay.distance - 0.1f) * Mathf.Sign(velocity.y)));
+                StartCoroutine(RicoBounce(1, (verticalRay.distance - bc.size.y * 0.5f) * Mathf.Sign(velocity.y)));
             }
         }
     }

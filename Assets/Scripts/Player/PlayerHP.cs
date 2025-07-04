@@ -13,9 +13,13 @@ public class PlayerHP : MonoBehaviour
     float currentInvulnaribilityDuration;
     public LayerMask hurtMask;
 
-    [Header("Visuals")]
+    [Header("UI Visuals")]
     public HealthScript healthScript;
     public SpriteFontMesh healthText;
+
+    [Header("Player Visuals")]
+    public GameObject playerSprite;
+    public LineRenderer playerTail;
 
     private void Start()
     {
@@ -27,7 +31,13 @@ public class PlayerHP : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentInvulnaribilityDuration > 0) currentInvulnaribilityDuration -= Time.fixedDeltaTime;
+        if (currentInvulnaribilityDuration > 0)
+        {
+            currentInvulnaribilityDuration = Mathf.Max(currentInvulnaribilityDuration - Time.fixedDeltaTime, 0);
+            float flickerDuration = 0.2f;
+            playerSprite.SetActive(Mathf.Pow(currentInvulnaribilityDuration, 1.25f) * 0.8f % flickerDuration < flickerDuration * 0.5f);
+            playerTail.enabled = playerSprite.activeSelf;
+        }
 
         bool isColliding = Physics2D.OverlapBox(transform.position, bc.size, transform.eulerAngles.z, hurtMask);
 
@@ -49,7 +59,7 @@ public class PlayerHP : MonoBehaviour
         if (health <= 0 || currentInvulnaribilityDuration > 0) return;
 
         health = Mathf.Max(health - damage, 0);
-        currentInvulnaribilityDuration = invulnarabilityDuration;
+        if (health > 0) currentInvulnaribilityDuration = invulnarabilityDuration;
 
         if (freezeInput) playerScript.inputLockedCooldown = 0.3f;
         playerScript.velocity = Vector2.up * 6;
