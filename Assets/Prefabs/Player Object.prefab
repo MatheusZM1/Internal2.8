@@ -794,7 +794,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerTwo: 0
+  isAnyPlayer: 0
   axisRaw: 0
+  horizontalPositiveKey: right
+  horizontalNegativeKey: left
+  verticalPositiveKey: up
+  verticalNegativeKey: down
+  selectKey: a
+  backKey: s
+  selectDown: 0
+  selectHold: 0
+  backDown: 0
+  backHold: 0
 --- !u!114 &798324663569170529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -811,10 +822,6 @@ MonoBehaviour:
   inputLockedCooldown: 0
   horizontal: 0
   vertical: 0
-  horizontalPositiveKey: right
-  horizontalNegativeKey: left
-  verticalPositiveKey: up
-  verticalNegativeKey: down
   directionFacing: {x: 0, y: 0}
   isAlive: 0
   speed: 5.25

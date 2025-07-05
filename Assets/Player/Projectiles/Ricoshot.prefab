@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerWeapon: {fileID: 0}
-  weaponType: 2
+  weaponType: 1
   weaponStats: {fileID: 11400000, guid: 8632c3cbaf31a5046908a96b9dfc975c, type: 2}
   isPrimary: 0
   velocity: {x: 0, y: 0}
@@ -155,8 +155,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1639870789
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 6286595657586805340, guid: 2a3e59d89fbe2ca4ca15b0f9adf9ca93, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

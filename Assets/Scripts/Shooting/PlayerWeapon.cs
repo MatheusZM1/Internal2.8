@@ -25,6 +25,36 @@ public class PlayerWeapon : MonoBehaviour
         playerScript = GetComponent<PlayerMovement>();
         inputScript = GetComponent<InputScript>();
         primaryWeaponSelected = true;
+    }
+
+    private void Start()
+    {
+        LoadWeapons();
+    }
+
+   public void LoadWeapons()
+    {
+        primaryWeaponSelected = true;
+        primaryOffsetIndex = 0;
+        secondaryOffsetIndex = 0;
+
+        while (primaryBulletPool.Count > 0)
+        {
+            var bullet = primaryBulletPool.Dequeue();
+            if (bullet != null) Destroy(bullet.gameObject);
+        }
+
+        while (secondaryBulletPool.Count > 0)
+        {
+            var bullet = secondaryBulletPool.Dequeue();
+            if (bullet != null) Destroy(bullet.gameObject);
+        }
+
+        primaryBulletPool.Clear();
+        secondaryBulletPool.Clear();
+
+        primaryBulletPrefab = LoadoutManager.instance.GetPrimaryNormal(playerScript.isPlayerTwo);
+        secondaryBulletPrefab = LoadoutManager.instance.GetSecondaryNormal(playerScript.isPlayerTwo);
 
         // Initialize the bullet pool
         for (int i = 0; i < primaryBulletPrefab.weaponStats.instanceCount; i++)

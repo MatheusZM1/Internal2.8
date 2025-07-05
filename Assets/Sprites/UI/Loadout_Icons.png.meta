@@ -1,19 +1,13 @@
 fileFormatVersion: 2
-guid: 787ad5f61e2e6b34ea25352e4aaf207b
+guid: 1fc15d649b40014468752e0bdfa643a7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 135827859031697830
-    second: Weapon_Icons_0
+      213: 6326736909728079097
+    second: Loadout_Icons_0
   - first:
-      213: -1292686763981439903
-    second: Weapon_Icons_1
-  - first:
-      213: 4207390410386180686
-    second: Weapon_Icons_2
-  - first:
-      213: -6024980785629365298
-    second: Weapon_Icons_3
+      213: -6163933067082781244
+    second: Loadout_Icons_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -103,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Weapon_Icons_0
+      name: Loadout_Icons_0
       rect:
         serializedVersion: 2
         x: 0
@@ -117,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6a9af28d7be82e100800000000000000
-      internalID: 135827859031697830
+      spriteID: 9fcd1bbe2b51dc750800000000000000
+      internalID: 6326736909728079097
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Weapon_Icons_1
+      name: Loadout_Icons_1
       rect:
         serializedVersion: 2
         x: 48
@@ -138,50 +132,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 16c7903bc347f0ee0800000000000000
-      internalID: -1292686763981439903
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Weapon_Icons_2
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e4a047a5947a36a30800000000000000
-      internalID: 4207390410386180686
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Weapon_Icons_3
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ecbf10ea5e7f26ca0800000000000000
-      internalID: -6024980785629365298
+      spriteID: 4cd2f3d888f457aa0800000000000000
+      internalID: -6163933067082781244
       vertices: []
       indices: 
       edges: []

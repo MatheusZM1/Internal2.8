@@ -10,8 +10,24 @@ public class InputScript : MonoBehaviour
     private InputActions inputActions;
     public static int activeInputDevice;
 
+    public static InputScript instanceP1;
+    public static InputScript instanceP2;
+
     public bool isPlayerTwo;
+    public bool isAnyPlayer;
+
+    [Header("Binds")]
+    public string horizontalPositiveKey;
+    public string horizontalNegativeKey;
+    public string verticalPositiveKey;
+    public string verticalNegativeKey;
+    public string selectKey;
+    public string backKey;
+
+    [Header("UI Input")]
     public bool axisRaw;
+    public bool selectDown, selectHold;
+    public bool backDown, backHold;
 
     private HashSet<string> downActions = new HashSet<string>();
     private HashSet<string> upActions = new HashSet<string>();
@@ -24,6 +40,21 @@ public class InputScript : MonoBehaviour
     {
         inputActions = new InputActions();
 
+        if (!isAnyPlayer)
+        {
+            if (isPlayerTwo)
+            {
+                instanceP2 = this;
+            }
+            else
+            {
+                instanceP1 = this;
+            }
+        }
+    }
+
+    private void Start()
+    {
         AssignController();
     }
 
@@ -66,6 +97,7 @@ public class InputScript : MonoBehaviour
 
     void AssignController()
     {
+        if (isAnyPlayer) return;
         // Get gamepads
         var gamepads = Gamepad.all;
 
@@ -77,6 +109,8 @@ public class InputScript : MonoBehaviour
         {
             assignedGamepad = gamepads[0];
         }
+
+        GameManagerScript.instance.playerTwoExists = gamepads.Count > 1;
 
         if (assignedGamepad != null)
         {
@@ -93,6 +127,16 @@ public class InputScript : MonoBehaviour
             activeInputDevice = 0;
             //Actions.onActiveInputDeviceUpdate?.Invoke();
         }
+
+        if ((Input.GetKeyDown(selectKey) && !isPlayerTwo) || GetActionDown("SouthB")) selectDown = true; // Select down
+        else selectDown = false;
+        if ((Input.GetKey(selectKey) && !isPlayerTwo) || GetActionHold("SouthB")) selectHold = true; // Select hold
+        else selectHold = false;
+
+        if ((Input.GetKeyDown(backKey) && !isPlayerTwo) || GetActionDown("EastB")) backDown = true; // Back down
+        else backDown = false;
+        if ((Input.GetKey(backKey) && !isPlayerTwo) || GetActionHold("EastB")) backHold = true; // Back hold
+        else backHold = false;
     }
 
     private void LateUpdate()
@@ -186,11 +230,11 @@ public class InputScript : MonoBehaviour
 
     public Vector2 GetPlayerAxis()
     {
-        if (assignedGamepad == null) return Vector2.zero;
+        if (assignedGamepad == null && !isAnyPlayer) return Vector2.zero;
 
         var actionControl = inputActions.Player.Axis.activeControl;
 
-        if (actionControl != null && actionControl.device != assignedGamepad) return Vector2.zero;
+        if (actionControl != null && actionControl.device != assignedGamepad && !isAnyPlayer) return Vector2.zero;
 
         if (actionControl != null)
         {
@@ -230,5 +274,24 @@ public class InputScript : MonoBehaviour
         Vector2 input = inputActions.Player.Axis.ReadValue<Vector2>();
         input = new Vector2(Mathf.Abs(input.x) > ControlOptions.controllerDeadZone ? input.x : 0, Mathf.Abs(input.y) > ControlOptions.controllerDeadZone ? input.y : 0); // Return joystick input with deadzone limits
         return axisRaw ? new Vector2(GetRawValue(input.x), GetRawValue(input.y)) : input;
+    }
+
+    float GetCustomAxis(string positiveKey, string negativeKey)
+    {
+        float positiveInput = Input.GetKey(positiveKey) ? 1f : 0f;
+        float negativeInput = Input.GetKey(negativeKey) ? -1f : 0f;
+        return Mathf.Abs(positiveInput + negativeInput) > ControlOptions.controllerDeadZone ? positiveInput + negativeInput : 0;
+    }
+
+    public float GetHorizontal()
+    {
+        float horizontalKey = isPlayerTwo ? 0 : GetCustomAxis(horizontalPositiveKey, horizontalNegativeKey);
+        return Mathf.Clamp(horizontalKey + GetPlayerAxis().x, -1, 1);
+    }
+
+    public float GetVertical()
+    {
+        float verticalKey = isPlayerTwo ? 0 : GetCustomAxis(verticalPositiveKey, verticalNegativeKey);
+        return Mathf.Clamp(verticalKey + GetPlayerAxis().y, -1, 1);
     }
 }

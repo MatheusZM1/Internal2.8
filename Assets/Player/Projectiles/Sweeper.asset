@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8d07ed2f79eb3a4680b6aa6e4f68ea1, type: 3}
-  m_Name: Shotgun
+  m_Name: Sweeper
   m_EditorClassIdentifier: 
   damage: 1.35
   fireCooldown: 0.15

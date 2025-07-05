@@ -8,17 +8,15 @@ public class PlayerMovement : MonoBehaviour
     PlayerHP healthScript;
     BoxCollider2D bc;
 
+    [Header("Static")]
+    public static int playersDead;
+
     [Header("Input")]
     public bool isPlayerTwo;
     public float inputLockedCooldown;
     public float horizontal;
     public float vertical;
 
-    [Header("Binds")]
-    public string horizontalPositiveKey;
-    public string horizontalNegativeKey;
-    public string verticalPositiveKey;
-    public string verticalNegativeKey;
     InputScript inputScript;
 
     [Header("Directions")]
@@ -123,25 +121,6 @@ public class PlayerMovement : MonoBehaviour
         Actions.levelReset -= Respawn;
     }
 
-    float GetCustomAxis(string positiveKey, string negativeKey)
-    {
-        float positiveInput = Input.GetKey(positiveKey) ? 1f : 0f;
-        float negativeInput = Input.GetKey(negativeKey) ? -1f : 0f;
-        return Mathf.Abs(positiveInput + negativeInput) > ControlOptions.controllerDeadZone ? positiveInput + negativeInput : 0;
-    }
-
-    private float GetHorizontal()
-    {
-        float horizontalKey = isPlayerTwo ? 0 : GetCustomAxis(horizontalPositiveKey, horizontalNegativeKey);
-        return Mathf.Clamp(horizontalKey + inputScript.GetPlayerAxis().x, -1, 1);
-    }
-
-    private float GetVertical()
-    {
-        float verticalKey = isPlayerTwo ? 0 : GetCustomAxis(verticalPositiveKey, verticalNegativeKey);
-        return Mathf.Clamp(verticalKey + inputScript.GetPlayerAxis().y, -1, 1);
-    }
-
     void Update()
     {
         if (Input.GetKeyDown("1"))
@@ -156,9 +135,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Time.timeScale = 0.2f;
         }
+
+        if (GameManagerScript.instance.gameDead) return;
+
         if ((Input.GetKeyDown("return") && !isPlayerTwo) || inputScript.GetActionDown("Pause"))
         {
-            GameManagerScript.instance.PauseGame();
+            if (!GameManagerScript.instance.gamePaused) GameManagerScript.instance.PauseGame();
         }
 
         if (Input.GetKeyDown("r"))
@@ -172,8 +154,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (inputLockedCooldown <= 0)
             {
-                horizontal = GetHorizontal();
-                vertical = GetVertical();
+                horizontal = inputScript.GetHorizontal();
+                vertical = inputScript.GetVertical();
             }
             else
             {
@@ -226,7 +208,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isLocked) transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Move
 
-        velocity.x = Mathf.Ceil(horizontal) * speed; // x Speed
+        if (inputLockedCooldown <= 0) velocity.x = Mathf.Ceil(horizontal) * speed; // x Speed
 
         if (isDashing) // Dash movement
         {
@@ -344,11 +326,18 @@ public class PlayerMovement : MonoBehaviour
         coyoteTimer = coyoteTimerPreset;
         canDash = true;
 
-        if (velocity.y < -2f && isAlive)
+        if (isAlive)
         {
-            StopSquishBody();
-            Vector2 targetSquish = new Vector2(1.1f, 1f);
-            bodySquishCoroutine = StartCoroutine(SquishBody(targetSquish, 8f));
+            if (velocity.y < -2f)
+            {
+                StopSquishBody();
+                Vector2 targetSquish = new Vector2(1.1f, 1f);
+                bodySquishCoroutine = StartCoroutine(SquishBody(targetSquish, 8f));
+            }
+        }
+        else
+        {
+            velocity.x = 0;
         }
     }
 
@@ -522,6 +511,8 @@ public class PlayerMovement : MonoBehaviour
     {
         float t = 0;
 
+        playersDead++;
+
         while (t < 1)
         {
             t += Time.deltaTime * 3;
@@ -532,6 +523,15 @@ public class PlayerMovement : MonoBehaviour
             tail.endColor = bodyObj.color;
 
             yield return null;
+        }
+
+        yield return new WaitForSeconds(0.25f);
+
+        bool twoPlayers = GameManagerScript.instance.playerTwoExists;
+
+        if ((twoPlayers && playersDead > 1) || !twoPlayers)
+        {
+            Actions.onGameDeath?.Invoke();
         }
     }
 
@@ -547,5 +547,9 @@ public class PlayerMovement : MonoBehaviour
         tail.endColor = bodyObj.color;
 
         transform.position = Vector3.zero;
+        velocity = Vector2.zero;
+
+        PlayerWeapon weaponScript = GetComponent<PlayerWeapon>();
+        weaponScript.LoadWeapons();
     }
 }

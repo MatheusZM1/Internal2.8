@@ -8,9 +8,9 @@ public class ProjectileBehaviour : MonoBehaviour
 
     public enum WeaponType
     {
-        basic,
-        shotgun,
-        rico
+        sharp,
+        rico,
+        sweep
     }
 
     BoxCollider2D bc;
@@ -47,6 +47,16 @@ public class ProjectileBehaviour : MonoBehaviour
     private void Awake()
     {
         bc = GetComponent<BoxCollider2D>();
+    }
+
+    private void OnEnable()
+    {
+        Actions.levelReset += DeActivate;
+    }
+
+    private void OnDisable()
+    {
+        Actions.levelReset -= DeActivate;
     }
 
     private void Update()

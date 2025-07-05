@@ -62,7 +62,7 @@ public class PlayerHP : MonoBehaviour
         if (health > 0) currentInvulnaribilityDuration = invulnarabilityDuration;
 
         if (freezeInput) playerScript.inputLockedCooldown = 0.3f;
-        playerScript.velocity = Vector2.up * 6;
+        playerScript.velocity = new Vector2(-2 * Mathf.Sign(playerScript.directionFacing.x), 6);
         playerScript.isJumping = false;
         playerScript.CancelDash();
 

@@ -42,7 +42,7 @@ public class Tail : MonoBehaviour
 
         if (!isGrounded) transform.position -= Vector3.up * gravity * Time.fixedDeltaTime;
 
-        if (tailHead) transform.position = targetPos.GetChild(0).transform.position + targetPos.GetChild(0).transform.up * -0.25f;
+        if (tailHead) transform.position = targetPos.GetChild(0).transform.position + targetPos.GetChild(0).transform.up * -0.28125f;
         else transform.position = Vector2.Lerp(transform.position, targetPos.position - (transform.right * distance), smoothing);
 
         sprite.transform.position = transform.position;
