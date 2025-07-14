@@ -7,6 +7,8 @@ public class WeaponStats : ScriptableObject
     public float damage;
     public float fireCooldown;
     public float projectileSpeed;
+    public float speedVarianceMin;
+    public float speedVarianceMax;
 
     [Header("Pierce")]
     public bool isPiercing;
@@ -19,7 +21,16 @@ public class WeaponStats : ScriptableObject
     [Header("Positioning")]
     public Vector2[] offsetList;
     public float[] angleVarianceList;
+    public float yVarianceMin;
+    public float yVarianceMax;
+
+    [Header("Scaling")]
+    public float scaleMin = 1;
+    public float scaleMax = 1;
 
     [Header("Instance")]
     public int instanceCount;
+
+    [Header("Visuals")]
+    public bool doNotRotateSprite;
 }

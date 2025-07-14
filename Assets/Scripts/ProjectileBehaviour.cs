@@ -10,7 +10,8 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         sharp,
         rico,
-        sweep
+        sweep,
+        bubble
     }
 
     BoxCollider2D bc;
@@ -42,6 +43,9 @@ public class ProjectileBehaviour : MonoBehaviour
     public float spriteRotationDelay;
     float currentSpriteRotationDelay;
     int maxBounceIncrement;
+
+    [Header("Bubble")]
+    float extraInitialVelocity;
 
 
     private void Awake()
@@ -92,11 +96,6 @@ public class ProjectileBehaviour : MonoBehaviour
                 DeActivate();
                 return;
             }
-            else
-            {
-                bc.enabled = false;
-                currentPierceCooldown = weaponStats.pierceCooldown;
-            }
         }
         if (isOffScreen)
         {
@@ -112,9 +111,13 @@ public class ProjectileBehaviour : MonoBehaviour
             case WeaponType.rico:
                 RicoBehaviourFixed();
                 break;
+
+            case WeaponType.bubble:
+                BubbleBehaviourFixed();
+                break;
         }
 
-        if (currentRange < 0) DeActivate();
+        if (currentRange <= 0f) DeActivate();
     }
 
     private void OnBecameInvisible()
@@ -130,7 +133,7 @@ public class ProjectileBehaviour : MonoBehaviour
             DeActivate();
             return;
         }
-        else
+        else if (bc.enabled)
         {
             bc.enabled = false;
             currentPierceCooldown = weaponStats.pierceCooldown;
@@ -150,23 +153,32 @@ public class ProjectileBehaviour : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SetVelocity(Vector2 direction, int offsetIndex, bool flipY = false)
+    public void SpawnSetVelocity(Vector2 direction, int offsetIndex, bool flipY = false)
     {
         isActive = true;
 
-        velocity = direction.normalized * weaponStats.projectileSpeed; // Set projectile speed
+        float randomVariance = Random.Range(weaponStats.speedVarianceMin, weaponStats.speedVarianceMax);
+        velocity = direction.normalized * (weaponStats.projectileSpeed + randomVariance); // Set projectile speed
         velocity = Quaternion.Euler(0, 0, weaponStats.angleVarianceList[offsetIndex % weaponStats.angleVarianceList.Length]) * velocity; // Modify projectile direction based on variance index
 
         float angle = Mathf.Round(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
         if (flipY) transform.localScale = new Vector3(1, -1, 1);
         UpdateSpriteAngle();
 
-        transform.position += Quaternion.Euler(0, 0, angle) * weaponStats.offsetList[offsetIndex];
+        transform.position += Quaternion.Euler(0, 0, angle) * (weaponStats.offsetList[offsetIndex] + Vector2.up * Random.Range(weaponStats.yVarianceMin, weaponStats.yVarianceMax));
+        transform.localScale = Vector2.one * Random.Range(weaponStats.scaleMin, weaponStats.scaleMax);
+
+        bc.enabled = true;
+        currentPierceCooldown = 0f;
 
         currentDamage = weaponStats.damage;
         currentRange = weaponStats.range;
 
+        if (weaponStats.doNotRotateSprite) spriteTransform.eulerAngles = Vector3.zero;
+
         maxBounceIncrement = 4;
+
+        extraInitialVelocity = randomVariance;
     }
 
     void UpdateSpriteAngle()
@@ -215,6 +227,12 @@ public class ProjectileBehaviour : MonoBehaviour
                 StartCoroutine(RicoBounce(1, (verticalRay.distance - bc.size.y * 0.5f) * Mathf.Sign(velocity.y)));
             }
         }
+    }
+
+    void BubbleBehaviourFixed()
+    {
+        velocity = velocity.normalized * (currentRange + 3f + extraInitialVelocity);
+        if (currentRange <= 0.05) currentRange = -1f;
     }
 
     IEnumerator RicoBounce(int direction, float distanceFromRebound)

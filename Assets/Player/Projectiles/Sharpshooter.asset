@@ -15,6 +15,8 @@ MonoBehaviour:
   damage: 4
   fireCooldown: 0.133333
   projectileSpeed: 15
+  speedVarianceMin: 0
+  speedVarianceMax: 0
   isPiercing: 0
   pierceCooldown: 0
   projectileCount: 1
@@ -26,4 +28,9 @@ MonoBehaviour:
   - {x: 0.375, y: -0.05}
   angleVarianceList:
   - 0
+  yVarianceMin: 0
+  yVarianceMax: 0
+  scaleMin: 1
+  scaleMax: 1
   instanceCount: 20
+  doNotRotateSprite: 0

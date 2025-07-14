@@ -121,17 +121,17 @@ public class PlayerWeapon : MonoBehaviour
             // Set bullet velocity based on player's facing direction
             if (playerScript.directionFacing.y == 0)
             {
-                newBullet.SetVelocity(playerScript.directionFacing, offsetIndex); // Shoot horizontally
+                newBullet.SpawnSetVelocity(playerScript.directionFacing, offsetIndex); // Shoot horizontally
             }
             else
             {
                 if (playerScript.horizontal == 0)
                 {
-                    newBullet.SetVelocity(new Vector2(0, playerScript.directionFacing.y), offsetIndex, playerScript.directionFacing.x < 0 ? true : false); // Shoot vertically
+                    newBullet.SpawnSetVelocity(new Vector2(0, playerScript.directionFacing.y), offsetIndex, playerScript.directionFacing.x < 0 ? true : false); // Shoot vertically
                 }
                 else
                 {
-                    newBullet.SetVelocity(new Vector2(playerScript.horizontal, playerScript.directionFacing.y), offsetIndex); // Shoot diagonally
+                    newBullet.SpawnSetVelocity(new Vector2(playerScript.horizontal, playerScript.directionFacing.y), offsetIndex); // Shoot diagonally
                 }
             }
 

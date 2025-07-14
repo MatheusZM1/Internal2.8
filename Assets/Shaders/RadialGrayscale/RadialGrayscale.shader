@@ -105,7 +105,7 @@ Shader "Custom/RadialGrayscale"
 
                 if(atanAngle >= startAngle && atanAngle <= endAngle) c = dot(c.rgb, float3(0.299, 0.587, 0.114));
                 if(atanAngle <= offset360) c = dot(c.rgb, float3(0.299, 0.587, 0.114));
-                if(atanAngle >= offset0) c = dot(col.rgb, float3(0.299, 0.587, 0.114));
+                if(atanAngle >= offset0) c = dot(c.rgb, float3(0.299, 0.587, 0.114));
 
 				return c;
 			}
