@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(InputScript))]
 public class PlayerMovement : MonoBehaviour
 {
+    PlayerWeapon weaponScript;
     PlayerHP healthScript;
     BoxCollider2D bc;
 
@@ -88,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
     {
         inputScript = GetComponent<InputScript>();
 
+        weaponScript = GetComponent<PlayerWeapon>();
         healthScript = GetComponent<PlayerHP>();
         bc = GetComponent<BoxCollider2D>();
 
@@ -208,7 +210,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isLocked) transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Move
 
-        if (inputLockedCooldown <= 0) velocity.x = Mathf.Ceil(horizontal) * speed; // x Speed
+        if (inputLockedCooldown <= 0) velocity.x = Mathf.Ceil(horizontal) * speed * weaponScript.playerSpeedModifier; // x Speed
 
         if (isDashing) // Dash movement
         {
@@ -549,7 +551,6 @@ public class PlayerMovement : MonoBehaviour
         transform.position = Vector3.zero;
         velocity = Vector2.zero;
 
-        PlayerWeapon weaponScript = GetComponent<PlayerWeapon>();
         weaponScript.LoadWeapons();
     }
 }

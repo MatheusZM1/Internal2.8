@@ -36,6 +36,7 @@ public class EnemyHP : MonoBehaviour
         if (health <= 0)
         {
             spriteRenderer.enabled = false;
+            GetComponent<Collider2D>().enabled = false;
         }
         else
         {
@@ -76,5 +77,6 @@ public class EnemyHP : MonoBehaviour
     {
         health = startHealth;
         spriteRenderer.enabled = true;
+        GetComponent<Collider2D>().enabled = true;
     }
 }

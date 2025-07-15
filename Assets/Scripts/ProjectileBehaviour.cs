@@ -11,7 +11,8 @@ public class ProjectileBehaviour : MonoBehaviour
         sharp,
         rico,
         sweep,
-        bubble
+        bubble,
+        sharpEX
     }
 
     BoxCollider2D bc;
@@ -21,6 +22,7 @@ public class ProjectileBehaviour : MonoBehaviour
     [Header("Stats")]
     public WeaponStats weaponStats;
     public bool isPrimary;
+    public bool isEX;
 
     [Header("Bullet Info")]
     public Vector2 velocity;
@@ -29,6 +31,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     [Header("Pierce")]
     public float currentPierceCooldown;
+    float freezeMovementDuration;
 
     [Header("Ray check")]
     public bool isColliding;
@@ -77,8 +80,15 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         if (!isActive) return;
 
-        transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Update projectile position
-        currentRange -= velocity.magnitude * Time.fixedDeltaTime;
+        if (freezeMovementDuration <= 0)
+        {
+            transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Update projectile position
+            currentRange -= velocity.magnitude * Time.fixedDeltaTime;
+        }
+        else
+        {
+            freezeMovementDuration -= Time.fixedDeltaTime;
+        }
 
         if (currentPierceCooldown > 0)
         {
@@ -120,7 +130,7 @@ public class ProjectileBehaviour : MonoBehaviour
         if (currentRange <= 0f) DeActivate();
     }
 
-    private void OnBecameInvisible()
+    public void OffscreenFunc()
     {
         if (weaponType == WeaponType.rico && currentRange > 0) return;
         if (isActive) isOffScreen = true;
@@ -137,6 +147,14 @@ public class ProjectileBehaviour : MonoBehaviour
         {
             bc.enabled = false;
             currentPierceCooldown = weaponStats.pierceCooldown;
+            switch (weaponType)
+            {
+                case WeaponType.sharpEX:
+                    freezeMovementDuration = 0.09f;
+                    currentDamage -= 4f / 3f;
+                    if (currentDamage < 0.1f) DeActivate();
+                    break;
+            }
         }
     }
 
@@ -147,8 +165,16 @@ public class ProjectileBehaviour : MonoBehaviour
         isColliding = false;
         velocity = Vector2.zero;
 
-        if (isPrimary) playerWeapon?.ReturnBulletToPrimaryPool(this);
-        else playerWeapon?.ReturnBulletSecondaryToPool(this);
+        if (!isEX)
+        {
+            if (isPrimary) playerWeapon?.ReturnBulletToPrimaryPool(this);
+            else playerWeapon?.ReturnBulletSecondaryToPool(this);
+        }
+        else
+        {
+            if (isPrimary) playerWeapon?.ReturnEXBulletToPrimaryPool(this);
+            else playerWeapon?.ReturnEXBulletSecondaryToPool(this);
+        }
 
         gameObject.SetActive(false);
     }
@@ -166,7 +192,7 @@ public class ProjectileBehaviour : MonoBehaviour
         UpdateSpriteAngle();
 
         transform.position += Quaternion.Euler(0, 0, angle) * (weaponStats.offsetList[offsetIndex] + Vector2.up * Random.Range(weaponStats.yVarianceMin, weaponStats.yVarianceMax));
-        transform.localScale = Vector2.one * Random.Range(weaponStats.scaleMin, weaponStats.scaleMax);
+        transform.localScale *= Random.Range(weaponStats.scaleMin, weaponStats.scaleMax);
 
         bc.enabled = true;
         currentPierceCooldown = 0f;

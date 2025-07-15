@@ -7,8 +7,11 @@ public class WeaponStats : ScriptableObject
     public float damage;
     public float fireCooldown;
     public float projectileSpeed;
+
+    [Header("Speeds")]
     public float speedVarianceMin;
     public float speedVarianceMax;
+    public float playerSpeedModifier;
 
     [Header("Pierce")]
     public bool isPiercing;

@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8d07ed2f79eb3a4680b6aa6e4f68ea1, type: 3}
-  m_Name: Bubblegun
+  m_Name: EXSharpshooter
   m_EditorClassIdentifier: 
-  damage: 1
-  fireCooldown: 0.083333336
-  projectileSpeed: 6
-  speedVarianceMin: -0.5
-  speedVarianceMax: 1
-  playerSpeedModifier: 0.5
+  damage: 12
+  fireCooldown: 15
+  projectileSpeed: 20
+  speedVarianceMin: 0
+  speedVarianceMax: 0
+  playerSpeedModifier: 0
   isPiercing: 1
-  pierceCooldown: 0.2
+  pierceCooldown: 0.1
   projectileCount: 1
-  range: 3
+  range: Infinity
   offsetList:
-  - {x: 0.5, y: 0}
+  - {x: 0, y: 0}
   angleVarianceList:
   - 0
-  yVarianceMin: -0.25
-  yVarianceMax: 0.25
-  scaleMin: 0.5
+  yVarianceMin: 0
+  yVarianceMax: 0
+  scaleMin: 1
   scaleMax: 1
-  instanceCount: 24
-  doNotRotateSprite: 1
+  instanceCount: 1
+  doNotRotateSprite: 0

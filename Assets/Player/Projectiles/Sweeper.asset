@@ -17,6 +17,7 @@ MonoBehaviour:
   projectileSpeed: 14
   speedVarianceMin: 0
   speedVarianceMax: 0
+  playerSpeedModifier: 0.75
   isPiercing: 0
   pierceCooldown: 0
   projectileCount: 4
