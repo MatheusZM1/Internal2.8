@@ -7,6 +7,7 @@ public class EnemyHP : MonoBehaviour
     [Header("Health")]
     public float startHealth;
     public float health;
+    public BoxCollider2D targetWall;
 
     [Header("Flash")]
     public SpriteRenderer spriteRenderer;
@@ -37,6 +38,7 @@ public class EnemyHP : MonoBehaviour
         {
             spriteRenderer.enabled = false;
             GetComponent<Collider2D>().enabled = false;
+            if (targetWall != null) targetWall.gameObject.SetActive(false);
         }
         else
         {
@@ -78,5 +80,6 @@ public class EnemyHP : MonoBehaviour
         health = startHealth;
         spriteRenderer.enabled = true;
         GetComponent<Collider2D>().enabled = true;
+        if (targetWall != null) targetWall.gameObject.SetActive(true);
     }
 }

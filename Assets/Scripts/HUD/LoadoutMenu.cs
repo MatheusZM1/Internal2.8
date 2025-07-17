@@ -141,6 +141,11 @@ public class LoadoutMenu : MonoBehaviour
             return;
         }
 
+        if (inputInstance.GetActionDown("SouthB"))
+        {
+            Debug.Log("here");
+        }
+
         if (inputInstance.selectDown) // Open selected menu
         {
             switch (menuSelected)
@@ -230,7 +235,7 @@ public class LoadoutMenu : MonoBehaviour
             }
         }
 
-        selectedSprite.transform.position = relicIcons[itemSelected].transform.position;
+        //selectedSprite.transform.position = relicIcons[itemSelected].transform.position;
 
         if (inputInstance.backDown) // Return to menu
         {

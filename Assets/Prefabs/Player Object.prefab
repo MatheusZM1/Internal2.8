@@ -729,6 +729,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 798324663569170543}
+  - component: {fileID: 2067802304449234249}
   - component: {fileID: 798324663569170540}
   - component: {fileID: 798324663569170538}
   - component: {fileID: 798324663569170529}
@@ -755,6 +756,27 @@ Transform:
   m_Father: {fileID: 798324663465640456}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &2067802304449234249
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798324663569170528}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &798324663569170540
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -795,13 +817,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerTwo: 0
   isAnyPlayer: 0
-  axisRaw: 0
   horizontalPositiveKey: right
   horizontalNegativeKey: left
   verticalPositiveKey: up
   verticalNegativeKey: down
   selectKey: a
   backKey: s
+  axisRaw: 0
   selectDown: 0
   selectHold: 0
   backDown: 0
@@ -880,10 +902,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primaryBulletPrefab: {fileID: 2456786383261353548, guid: 49ce4fe499e8c3b4bae524573462d40e, type: 3}
   secondaryBulletPrefab: {fileID: 647876728633091983, guid: 6a21eb9276484f34680291c62077f498, type: 3}
+  EXPrimaryBulletPrefab: {fileID: 0}
+  EXSecondaryBulletPrefab: {fileID: 0}
   primaryWeaponSelected: 0
   fireCooldown: 0
+  playerSpeedModifier: 0
   primaryOffsetIndex: 0
   secondaryOffsetIndex: 0
+  primaryCooldown: 0
+  secondaryCooldown: 0
 --- !u!114 &5944095857703607110
 MonoBehaviour:
   m_ObjectHideFlags: 0

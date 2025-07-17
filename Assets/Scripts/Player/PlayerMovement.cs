@@ -76,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
     public SpriteRenderer leftEye, rightEye;
     public LineRenderer tail;
 
+    Vector2 startPos;
+
     Vector2 bodyStartScale;
     Coroutine bodySquishCoroutine;
 
@@ -111,6 +113,8 @@ public class PlayerMovement : MonoBehaviour
         {
             otherPlayerScript = GameObject.FindGameObjectWithTag("PlayerTwo").GetComponent<PlayerMovement>();
         }
+
+        startPos = transform.position;
     }
 
     private void OnEnable()
@@ -208,9 +212,8 @@ public class PlayerMovement : MonoBehaviour
 
     void HandlePhysics()
     {
-        if (!isLocked) transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Move
-
-        if (inputLockedCooldown <= 0) velocity.x = Mathf.Ceil(horizontal) * speed * weaponScript.playerSpeedModifier; // x Speed
+        float horizontalInput = horizontal > 0 ? Mathf.Ceil(horizontal) : Mathf.Floor(horizontal);
+        if (inputLockedCooldown <= 0) velocity.x = horizontalInput * speed * weaponScript.playerSpeedModifier; // x Speed
 
         if (isDashing) // Dash movement
         {
@@ -220,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
                 currentDashTimer -= Time.fixedDeltaTime;
                 if (currentDashTimer <= 0) // Dash end
                 {
-                    float overheardPercent = (0.02f - Mathf.Abs(currentDashTimer)) / Time.fixedDeltaTime; // Decrement dash overhead fail-safe
+                    float overheardPercent = (0.005f - Mathf.Abs(currentDashTimer)) / Time.fixedDeltaTime; // Decrement dash overhead fail-safe
                     velocity.x *= overheardPercent;
                     isDashing = false;
                     currentDashCooldown = dashCooldown;
@@ -228,10 +231,13 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        RaycastHit2D wallToTheLeftBottom = Physics2D.Raycast(transform.position - Vector3.up * bc.size.y * 0.45f, -Vector2.right, bc.size.x * 0.5f, solidGroundMask | boundaryMask);
-        RaycastHit2D wallToTheLeftTop = Physics2D.Raycast(transform.position + Vector3.up * bc.size.y * 0.45f, -Vector2.right, bc.size.x * 0.5f, solidGroundMask | boundaryMask);
-        RaycastHit2D wallToTheRightBottom = Physics2D.Raycast(transform.position - Vector3.up * bc.size.y * 0.45f, Vector2.right, bc.size.x * 0.5f, solidGroundMask | boundaryMask);
-        RaycastHit2D wallToTheRightTop = Physics2D.Raycast(transform.position + Vector3.up * bc.size.y * 0.45f, Vector2.right, bc.size.x * 0.5f, solidGroundMask | boundaryMask);
+        if (!isLocked) transform.position += (Vector3)velocity * Time.fixedDeltaTime; // Move
+
+        float wallRayLength = Mathf.Max(bc.size.x * 0.5f, Mathf.Abs(velocity.x) * Time.fixedDeltaTime);
+        RaycastHit2D wallToTheLeftBottom = Physics2D.Raycast(transform.position - Vector3.up * bc.size.y * 0.45f, -Vector2.right, wallRayLength, solidGroundMask | boundaryMask);
+        RaycastHit2D wallToTheLeftTop = Physics2D.Raycast(transform.position + Vector3.up * bc.size.y * 0.45f, -Vector2.right, wallRayLength, solidGroundMask | boundaryMask);
+        RaycastHit2D wallToTheRightBottom = Physics2D.Raycast(transform.position - Vector3.up * bc.size.y * 0.45f, Vector2.right, wallRayLength, solidGroundMask | boundaryMask);
+        RaycastHit2D wallToTheRightTop = Physics2D.Raycast(transform.position + Vector3.up * bc.size.y * 0.45f, Vector2.right, wallRayLength, solidGroundMask | boundaryMask);
 
         if (velocity.x < 0) // Check for walls to the left while moving left
         {
@@ -242,6 +248,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (rayToUse.collider != null)
             {
+                transform.position = new Vector2(rayToUse.point.x + bc.size.x * 0.5f, transform.position.y);
                 velocity.x = 0;
             }
         }
@@ -534,6 +541,7 @@ public class PlayerMovement : MonoBehaviour
         if ((twoPlayers && playersDead > 1) || !twoPlayers)
         {
             Actions.onGameDeath?.Invoke();
+            Time.timeScale = 0;
         }
     }
 
@@ -548,7 +556,7 @@ public class PlayerMovement : MonoBehaviour
         tail.startColor = bodyObj.color;
         tail.endColor = bodyObj.color;
 
-        transform.position = Vector3.zero;
+        transform.position = startPos;
         velocity = Vector2.zero;
 
         weaponScript.LoadWeapons();

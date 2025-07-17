@@ -101,6 +101,7 @@ public class GameManagerScript : MonoBehaviour
     {
         gameDead = false;
         PlayerMovement.playersDead = 0;
+        Time.timeScale = 1;
     }
 
     public void PauseGame()

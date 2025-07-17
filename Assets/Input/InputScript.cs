@@ -148,7 +148,7 @@ public class InputScript : MonoBehaviour
     private void RegisterAction(InputAction action, string actionName)
     {
         action.started += ctx => {
-            if (ctx.control.device != assignedGamepad) return;
+            if (ctx.control.device != assignedGamepad && !isAnyPlayer) return;
 
             downActions.Add(actionName);
             holdActions.Add(actionName);
@@ -184,7 +184,7 @@ public class InputScript : MonoBehaviour
             }
         };
         action.canceled += ctx => {
-            if (ctx.control.device != assignedGamepad) return;
+            if (ctx.control.device != assignedGamepad && !isAnyPlayer) return;
 
             upActions.Add(actionName);
             holdActions.Remove(actionName);
