@@ -198,7 +198,7 @@ public class ProjectileBehaviour : MonoBehaviour
         currentPierceCooldown = 0f;
 
         currentDamage = weaponStats.damage;
-        currentRange = weaponStats.range;
+        currentRange = weaponStats.range + Random.Range(weaponStats.rangeVarianceMin, weaponStats.rangeVarianceMax);
 
         if (weaponStats.doNotRotateSprite) spriteTransform.eulerAngles = Vector3.zero;
 

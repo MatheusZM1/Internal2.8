@@ -20,6 +20,8 @@ public class WeaponStats : ScriptableObject
     [Header("Projectiles")]
     public int projectileCount;
     public float range;
+    public float rangeVarianceMin;
+    public float rangeVarianceMax;
 
     [Header("Positioning")]
     public Vector2[] offsetList;

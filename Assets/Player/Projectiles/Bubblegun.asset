@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   fireCooldown: 0.083333336
-  projectileSpeed: 6
+  projectileSpeed: 5
   speedVarianceMin: -0.5
   speedVarianceMax: 1
   playerSpeedModifier: 0.5
@@ -22,6 +22,8 @@ MonoBehaviour:
   pierceCooldown: 0.2
   projectileCount: 1
   range: 3
+  rangeVarianceMin: -0.5
+  rangeVarianceMax: 0.5
   offsetList:
   - {x: 0.5, y: 0}
   angleVarianceList:
