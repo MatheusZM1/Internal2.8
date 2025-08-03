@@ -111,6 +111,7 @@ public class InputScript : MonoBehaviour
         }
 
         GameManagerScript.instance.playerTwoExists = gamepads.Count > 1;
+        Actions.onPlayerTwoConnect?.Invoke(gamepads.Count > 1);
 
         if (assignedGamepad != null)
         {

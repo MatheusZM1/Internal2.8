@@ -7,13 +7,12 @@ public class TailRenderer : MonoBehaviour
 {
     [Header("Tail Joint Transforms")]
     public List<Transform> tailJoints;
-    public int updRate;
 
     [Header("Line Renderer Settings")]
     public float startWidth = 0.5f;
     public float endWidth = 0.1f;
     public Material tailMaterial;
-    public int interpolationSteps = 5; // More = smoother curve
+    public int interpolationSteps = 5;
 
     private LineRenderer lineRenderer;
     private List<Vector3> smoothPoints = new List<Vector3>();

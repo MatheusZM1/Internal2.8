@@ -115,20 +115,35 @@ public class PlayerMovement : MonoBehaviour
         }
 
         startPos = transform.position;
+
+        if (isPlayerTwo && !GameManagerScript.instance.playerTwoExists) // Disable player 2 if only 1 player is connected
+        {
+            PlayerTwoConnects(false);
+        }
     }
 
     private void OnEnable()
     {
+        if (isPlayerTwo) Actions.onPlayerTwoConnect += PlayerTwoConnects;
         Actions.levelReset += Respawn;
     }
 
     private void OnDisable()
     {
+        if (isPlayerTwo) Actions.onPlayerTwoConnect -= PlayerTwoConnects;
         Actions.levelReset -= Respawn;
+    }
+
+    void PlayerTwoConnects(bool boolean)
+    {
+        spriteObj.gameObject.SetActive(boolean);
+        tail.gameObject.SetActive(boolean);
     }
 
     void Update()
     {
+        if (isPlayerTwo && !GameManagerScript.instance.playerTwoExists) return;
+
         if (Input.GetKeyDown("1"))
         {
             Time.timeScale = 1f;
@@ -203,6 +218,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isPlayerTwo && !GameManagerScript.instance.playerTwoExists) return;
         HandlePhysics();
 
         // Update previous and current positions (used for smoothly interpolating player sprite)

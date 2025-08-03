@@ -14,7 +14,6 @@ public class Tail : MonoBehaviour
     [Header("Tail Physics")]
     public float distance;
     public float smoothing;
-    public float updRate;
 
     [Header("Physics")]
     public float gravity;
@@ -34,7 +33,7 @@ public class Tail : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 direction = targetPos.position - transform.position;
+        Vector3 direction = (targetPos.position + Vector3.up * 0.03125f) - transform.position;
 
         transform.eulerAngles = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg * Vector3.forward;
 
@@ -42,7 +41,7 @@ public class Tail : MonoBehaviour
 
         if (!isGrounded) transform.position -= Vector3.up * gravity * Time.fixedDeltaTime;
 
-        if (tailHead) transform.position = targetPos.GetChild(0).transform.position + targetPos.GetChild(0).transform.up * -0.28125f;
+        if (tailHead) transform.position = targetPos.GetChild(0).transform.position + targetPos.GetChild(0).transform.up * -0.25f;
         else transform.position = Vector2.Lerp(transform.position, targetPos.position - (transform.right * distance), smoothing);
 
         sprite.transform.position = transform.position;

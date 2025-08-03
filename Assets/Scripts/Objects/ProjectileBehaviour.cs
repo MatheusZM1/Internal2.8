@@ -236,7 +236,7 @@ public class ProjectileBehaviour : MonoBehaviour
         isColliding = false;
 
         RaycastHit2D horizontalRay = Physics2D.Raycast(transform.position, Vector2.right * Mathf.Sign(velocity.x), Mathf.Abs(velocity.x) * Time.fixedDeltaTime + bc.size.x * 0.51f, groundMask);
-        RaycastHit2D verticalRay = Physics2D.Raycast(transform.position, Vector2.up * Mathf.Sign(velocity.y), Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.x * 0.51f, groundMask);
+        RaycastHit2D verticalRay = Physics2D.Raycast(transform.position, Vector2.up * Mathf.Sign(velocity.y), Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.y * 0.51f, groundMask);
 
         if (velocity.x != 0)
         {
@@ -276,7 +276,6 @@ public class ProjectileBehaviour : MonoBehaviour
             else
             {
                 velocity.x *= -1;
-                velocity.y *= 1;
             }
         }
         else
@@ -291,7 +290,6 @@ public class ProjectileBehaviour : MonoBehaviour
             }
             else
             {
-                velocity.x *= 1;
                 velocity.y *= -1;
             }
         }

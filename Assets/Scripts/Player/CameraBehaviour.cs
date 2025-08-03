@@ -40,7 +40,7 @@ public class CameraBehaviour : MonoBehaviour
     private void FixedUpdate()
     {
         float averageX = (player.transform.position.x + playerTwo.transform.position.x) * 0.5f;
-        if (player.isAlive && !playerTwo.isAlive) averageX = player.transform.position.x;
+        if (player.isAlive && !playerTwo.isAlive || !GameManagerScript.instance.playerTwoExists) averageX = player.transform.position.x;
         else if (!player.isAlive && playerTwo.isAlive) averageX = playerTwo.transform.position.x;
         targetPosition = new Vector3(averageX, transform.position.y, transform.position.z);
     }
