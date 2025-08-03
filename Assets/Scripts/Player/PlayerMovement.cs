@@ -536,8 +536,6 @@ public class PlayerMovement : MonoBehaviour
     {
         float t = 0;
 
-        playersDead++;
-
         while (t < 1)
         {
             t += Time.deltaTime * 3;
@@ -551,6 +549,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.25f);
+
+        playersDead++;
 
         bool twoPlayers = GameManagerScript.instance.playerTwoExists;
 

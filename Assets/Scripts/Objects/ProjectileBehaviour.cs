@@ -238,7 +238,7 @@ public class ProjectileBehaviour : MonoBehaviour
         RaycastHit2D horizontalRay = Physics2D.Raycast(transform.position, Vector2.right * Mathf.Sign(velocity.x), Mathf.Abs(velocity.x) * Time.fixedDeltaTime + bc.size.x * 0.51f, groundMask);
         RaycastHit2D verticalRay = Physics2D.Raycast(transform.position, Vector2.up * Mathf.Sign(velocity.y), Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.y * 0.51f, groundMask);
 
-        if (velocity.x != 0)
+        if (velocity.x != 0) // Horiozntal bounce
         {
             if (horizontalRay.collider != null)
             {
@@ -246,11 +246,22 @@ public class ProjectileBehaviour : MonoBehaviour
             }
         }
 
-        if (velocity.y != 0)
+        if (velocity.y != 0) // Vertical bounce
         {
             if (verticalRay.collider != null)
             {
                 StartCoroutine(RicoBounce(1, (verticalRay.distance - bc.size.y * 0.5f) * Mathf.Sign(velocity.y)));
+            }
+        }
+
+        if (velocity.x != 0 && velocity.y != 0 && horizontalRay.collider != null && verticalRay.collider != null) // Diagonal bounce
+        {
+            float diagonalSize = Mathf.Sqrt(bc.size.x * bc.size.x + bc.size.y * bc.size.y);
+            RaycastHit2D diagonalRay = Physics2D.Raycast(transform.position, Vector2.right * Mathf.Sign(velocity.x) + Vector2.up * Mathf.Sign(velocity.y), Mathf.Abs(velocity.magnitude) * Time.fixedDeltaTime + diagonalSize * 0.51f, groundMask);
+
+            if (diagonalRay.collider != null)
+            {
+                StartCoroutine(RicoBounce(2, diagonalRay.distance - diagonalSize * 0.5f));
             }
         }
     }
@@ -278,7 +289,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 velocity.x *= -1;
             }
         }
-        else
+        else if (direction == 1)
         {
             if (maxBounceIncrement > 0)
             {
@@ -293,11 +304,31 @@ public class ProjectileBehaviour : MonoBehaviour
                 velocity.y *= -1;
             }
         }
+        else
+        {
+            if (maxBounceIncrement > 0)
+            {
+                velocity.x *= 1.25f;
+                velocity.y *= -1.25f;
+                currentDamage += 1f;
+                currentRange += 2f;
+                maxBounceIncrement--;
+            }
+            else
+            {
+                velocity.x *= -1;
+                velocity.y *= -1;
+            }
+        }
         UpdateSpriteAngle();
 
         yield return new WaitForFixedUpdate();
 
         if (direction == 0) transform.position += Vector3.right * distanceFromRebound; // Horizontal rebound offset fix
-        else  transform.position += Vector3.up * distanceFromRebound; // Vertical rebound offset fix
+        else if(direction == 1)  transform.position += Vector3.up * distanceFromRebound; // Vertical rebound offset fix
+        else
+        {
+            transform.position += new Vector3(1 * Mathf.Sign(velocity.x), 1 * -Mathf.Sign(velocity.y)) * distanceFromRebound;
+        }
     }
 }

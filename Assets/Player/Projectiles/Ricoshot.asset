@@ -22,8 +22,10 @@ MonoBehaviour:
   pierceCooldown: 0
   projectileCount: 1
   range: 15
+  rangeVarianceMin: 0
+  rangeVarianceMax: 0
   offsetList:
-  - {x: 0.375, y: 0}
+  - {x: 0.25, y: 0}
   angleVarianceList:
   - 0
   yVarianceMin: 0
