@@ -12,6 +12,7 @@ public class ProjectileBehaviour : MonoBehaviour
         rico,
         sweep,
         bubble,
+        spike,
         sharpEX
     }
 
@@ -31,7 +32,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     [Header("Pierce")]
     public float currentPierceCooldown;
-    float freezeMovementDuration;
+    public float freezeMovementDuration;
 
     [Header("Ray check")]
     public bool isColliding;
@@ -49,6 +50,9 @@ public class ProjectileBehaviour : MonoBehaviour
 
     [Header("Bubble")]
     float extraInitialVelocity;
+
+    [Header("Spike")]
+    public float spikeGravity;
 
 
     private void Awake()
@@ -93,8 +97,9 @@ public class ProjectileBehaviour : MonoBehaviour
         if (currentPierceCooldown > 0)
         {
             currentPierceCooldown -= Time.fixedDeltaTime;
-            if (currentPierceCooldown <= 0)
+            if (currentPierceCooldown <= 0.001f)
             {
+                currentPierceCooldown = 0f;
                 bc.enabled = true;
             }
         }
@@ -110,7 +115,7 @@ public class ProjectileBehaviour : MonoBehaviour
         if (isOffScreen)
         {
             isOffScreen = false;
-            DeActivate();
+            if (weaponType != WeaponType.spike) DeActivate();
             return;
         }
 
@@ -124,6 +129,10 @@ public class ProjectileBehaviour : MonoBehaviour
 
             case WeaponType.bubble:
                 BubbleBehaviourFixed();
+                break;
+
+            case WeaponType.spike:
+                SpikeBehaviourFixed();
                 break;
         }
 
@@ -150,7 +159,7 @@ public class ProjectileBehaviour : MonoBehaviour
             switch (weaponType)
             {
                 case WeaponType.sharpEX:
-                    freezeMovementDuration = 0.09f;
+                    freezeMovementDuration = weaponStats.pierceCooldown - Time.fixedDeltaTime;
                     currentDamage -= 4f / 3f;
                     if (currentDamage < 0.1f) DeActivate();
                     break;
@@ -183,8 +192,8 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         isActive = true;
 
-        float randomVariance = Random.Range(weaponStats.speedVarianceMin, weaponStats.speedVarianceMax);
-        velocity = direction.normalized * (weaponStats.projectileSpeed + randomVariance); // Set projectile speed
+        float randomSpeedVariance = Random.Range(weaponStats.speedVarianceMin, weaponStats.speedVarianceMax);
+        velocity = direction.normalized * (weaponStats.projectileSpeed + randomSpeedVariance); // Set projectile speed
         velocity = Quaternion.Euler(0, 0, weaponStats.angleVarianceList[offsetIndex % weaponStats.angleVarianceList.Length]) * velocity; // Modify projectile direction based on variance index
 
         float angle = Mathf.Round(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
@@ -204,7 +213,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
         maxBounceIncrement = 4;
 
-        extraInitialVelocity = randomVariance;
+        extraInitialVelocity = randomSpeedVariance;
     }
 
     void UpdateSpriteAngle()
@@ -270,6 +279,11 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         velocity = velocity.normalized * (currentRange + 3f + extraInitialVelocity);
         if (currentRange <= 0.05) currentRange = -1f;
+    }
+
+    void SpikeBehaviourFixed()
+    {
+        velocity.y -= spikeGravity * Time.fixedDeltaTime;
     }
 
     IEnumerator RicoBounce(int direction, float distanceFromRebound)

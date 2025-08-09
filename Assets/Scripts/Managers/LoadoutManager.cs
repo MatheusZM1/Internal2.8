@@ -29,7 +29,7 @@ public class LoadoutManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        primaryP1 = 0;
+        primaryP1 = 4;
         secondaryP1 = 1;
         primaryP2 = 0;
         secondaryP2 = 1;

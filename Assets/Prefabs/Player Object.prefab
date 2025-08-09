@@ -942,7 +942,7 @@ MonoBehaviour:
     m_Bits: 512
   boundaryMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 1032
   voidMask:
     serializedVersion: 2
     m_Bits: 2048

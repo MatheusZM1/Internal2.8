@@ -80,14 +80,16 @@ MonoBehaviour:
   currentDamage: 0
   currentRange: 0
   currentPierceCooldown: 0
+  freezeMovementDuration: 0
   isColliding: 0
   isOffScreen: 0
   isActive: 0
   groundMask:
     serializedVersion: 2
-    m_Bits: 3328
+    m_Bits: 3336
   spriteTransform: {fileID: 2448115920217576380}
   spriteRotationDelay: 0.125
+  spikeGravity: 0
 --- !u!1 &8444104082671647927
 GameObject:
   m_ObjectHideFlags: 0

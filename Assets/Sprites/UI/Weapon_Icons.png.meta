@@ -14,6 +14,15 @@ TextureImporter:
   - first:
       213: -6024980785629365298
     second: Weapon_Icons_3
+  - first:
+      213: -8845434035057206659
+    second: Weapon_Icons_4
+  - first:
+      213: -4400266256596966997
+    second: Weapon_Icons_5
+  - first:
+      213: -6601700733913650495
+    second: Weapon_Icons_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -182,6 +191,69 @@ TextureImporter:
       bones: []
       spriteID: ecbf10ea5e7f26ca0800000000000000
       internalID: -6024980785629365298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Weapon_Icons_4
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7ad3483c94be3580800000000000000
+      internalID: -8845434035057206659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Weapon_Icons_5
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba1666a372d1fe2c0800000000000000
+      internalID: -4400266256596966997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Weapon_Icons_6
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ca24a9e82c0264a0800000000000000
+      internalID: -6601700733913650495
       vertices: []
       indices: 
       edges: []

@@ -207,13 +207,13 @@ public class LoadoutMenu : MonoBehaviour
         {
             if (weaponIndex == 0) // Change selected primary weapon
             {
-                if (!isPlayerTwo) LoadoutManager.instance.SetSelectedPrimaryP1(Mathf.Min(itemSelected, 3)); // Temp cap as not all weapons are implemented
-                else LoadoutManager.instance.SetSelectedPrimaryP2(Mathf.Min(itemSelected, 3));
+                if (!isPlayerTwo) LoadoutManager.instance.SetSelectedPrimaryP1(Mathf.Min(itemSelected, 4)); // Temp cap as not all weapons are implemented
+                else LoadoutManager.instance.SetSelectedPrimaryP2(Mathf.Min(itemSelected, 4));
             }
             else // Change selected secondary weapon
             {
-                if (!isPlayerTwo) LoadoutManager.instance.SetSelectedSecondaryP1(Mathf.Min(itemSelected, 3));
-                else LoadoutManager.instance.SetSelectedSecondaryP2(Mathf.Min(itemSelected, 3));
+                if (!isPlayerTwo) LoadoutManager.instance.SetSelectedSecondaryP1(Mathf.Min(itemSelected, 4));
+                else LoadoutManager.instance.SetSelectedSecondaryP2(Mathf.Min(itemSelected, 4));
             }
             equippedSprite.transform.position = weaponIcons[itemSelected].transform.position;
         }

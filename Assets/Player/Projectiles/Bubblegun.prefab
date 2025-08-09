@@ -175,11 +175,13 @@ MonoBehaviour:
   currentDamage: 0
   currentRange: 0
   currentPierceCooldown: 0
+  freezeMovementDuration: 0
   isColliding: 0
   isOffScreen: 0
   isActive: 0
   groundMask:
     serializedVersion: 2
-    m_Bits: 3328
+    m_Bits: 3336
   spriteTransform: {fileID: 2592989136173810740}
   spriteRotationDelay: 0
+  spikeGravity: 0
