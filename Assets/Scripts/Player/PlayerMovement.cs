@@ -74,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform spriteObj;
     public SpriteRenderer bodyObj;
     public SpriteRenderer leftEye, rightEye;
+    public SpriteRenderer leftEar, rightEar;
     public LineRenderer tail;
 
     Vector2 startPos;
@@ -542,6 +543,8 @@ public class PlayerMovement : MonoBehaviour
             bodyObj.transform.localPosition = Vector2.Lerp(Vector2.up * -0.25f, new Vector2(0, -0.35f), MathFunctions.EaseIn(t, 2));
             bodyObj.transform.eulerAngles = Vector3.forward * Mathf.Lerp(0, -90 * directionFacing.x, MathFunctions.EaseIn(t, 2));
             bodyObj.color = Color.Lerp(Color.black, new Color(0.5f, 0f, 0f), MathFunctions.EaseIn(t, 2));
+            leftEar.color = bodyObj.color;
+            rightEar.color = bodyObj.color;
             tail.startColor = bodyObj.color;
             tail.endColor = bodyObj.color;
 
@@ -569,6 +572,7 @@ public class PlayerMovement : MonoBehaviour
         bodyObj.transform.localPosition = Vector2.up * -0.25f;
         bodyObj.transform.eulerAngles = Vector3.zero;
         bodyObj.color = Color.black;
+        rightEar.color = bodyObj.color;
         tail.startColor = bodyObj.color;
         tail.endColor = bodyObj.color;
 

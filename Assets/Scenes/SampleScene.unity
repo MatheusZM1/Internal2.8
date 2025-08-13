@@ -11428,25 +11428,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 798324662780189135, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 798324662780189135, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 798324662985913955, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 798324662985913955, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.5
-      objectReference: {fileID: 0}
     - target: {fileID: 798324663465640456, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 798324663465640456, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 798324663465640456, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 798324663465640456, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 798324663465640456, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
       propertyPath: m_LocalRotation.w
@@ -11479,22 +11475,6 @@ PrefabInstance:
     - target: {fileID: 798324663465640459, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
       propertyPath: m_Name
       value: Player Object
-      objectReference: {fileID: 0}
-    - target: {fileID: 798324663569170541, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
-      propertyPath: primaryBulletPrefab
-      value: 
-      objectReference: {fileID: 647876728633091983, guid: 6a21eb9276484f34680291c62077f498, type: 3}
-    - target: {fileID: 798324663569170541, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
-      propertyPath: secondaryBulletPrefab
-      value: 
-      objectReference: {fileID: 3920266606466288036, guid: 994b12bf57714c548964f9a99b32ecc8, type: 3}
-    - target: {fileID: 798324663569170543, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 798324663569170543, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 5944095857703607110, guid: 2fed9b270fb69e049b0ea4006b79e9ca, type: 3}
       propertyPath: healthText
