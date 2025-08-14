@@ -2798,7 +2798,7 @@ GameObject:
   - component: {fileID: 657265327}
   m_Layer: 12
   m_Name: Enemy (1)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5478,7 +5478,7 @@ GameObject:
   - component: {fileID: 1290714029}
   m_Layer: 12
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5616,7 +5616,7 @@ GameObject:
   - component: {fileID: 1326645295}
   m_Layer: 12
   m_Name: Enemy (2)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5883,12 +5883,14 @@ MonoBehaviour:
   - {fileID: 3920266606466288036, guid: 994b12bf57714c548964f9a99b32ecc8, type: 3}
   - {fileID: 5664991005040548870, guid: 2f5207d2abcf7c04c969c307bc5200e5, type: 3}
   - {fileID: 7450562634818767170, guid: b5959b052ccf539468a698db366943f6, type: 3}
+  - {fileID: 7152832549530808533, guid: ea9892d623dbb074b8305f43e90edd56, type: 3}
   EXBullets:
   - {fileID: 8908522280560573111, guid: 67e1ef6ec8805dc48a7bd3b600299a75, type: 3}
   - {fileID: 647876728633091983, guid: 6a21eb9276484f34680291c62077f498, type: 3}
   - {fileID: 3920266606466288036, guid: 994b12bf57714c548964f9a99b32ecc8, type: 3}
   - {fileID: 5664991005040548870, guid: 2f5207d2abcf7c04c969c307bc5200e5, type: 3}
   - {fileID: 7450562634818767170, guid: b5959b052ccf539468a698db366943f6, type: 3}
+  - {fileID: 7152832549530808533, guid: ea9892d623dbb074b8305f43e90edd56, type: 3}
   primaryP1: 0
   secondaryP1: 0
   primaryP2: 0

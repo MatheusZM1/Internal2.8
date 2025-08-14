@@ -13,6 +13,8 @@ public class ProjectileBehaviour : MonoBehaviour
         sweep,
         bubble,
         spike,
+        homer,
+        mini,
         sharpEX
     }
 
@@ -54,6 +56,9 @@ public class ProjectileBehaviour : MonoBehaviour
     [Header("Spike")]
     public float spikeGravity;
 
+    [Header("Homer")]
+    public float maxRotationSpeed;
+    EnemyHP targetEnemy;
 
     private void Awake()
     {
@@ -133,6 +138,10 @@ public class ProjectileBehaviour : MonoBehaviour
 
             case WeaponType.spike:
                 SpikeBehaviourFixed();
+                break;
+
+            case WeaponType.homer:
+                HomerBehaviourFixed();
                 break;
         }
 
@@ -214,6 +223,36 @@ public class ProjectileBehaviour : MonoBehaviour
         maxBounceIncrement = 4;
 
         extraInitialVelocity = randomSpeedVariance;
+
+        if (weaponType == WeaponType.homer)
+        {
+            var nearestEnemy = FindNearestEnemy();
+            if (nearestEnemy != null) targetEnemy = nearestEnemy.GetComponent<EnemyHP>();
+            else targetEnemy = null;
+        }
+    }
+
+    GameObject FindNearestEnemy()
+    {
+        // Locate all enemy objects
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject nearest = null;
+        float minDist = Mathf.Infinity;
+        Vector3 pos = transform.position;
+
+        foreach (var obj in objs)
+        {
+            if (obj.GetComponent<EnemyHP>().health <= 0) continue;
+
+            float dist = Vector2.Distance(pos, obj.transform.position);
+            if (dist < minDist && dist < 17f) // Determine closest enemy within limit
+            {
+                minDist = dist;
+                nearest = obj;
+            }
+        }
+
+        return nearest;
     }
 
     void UpdateSpriteAngle()
@@ -284,6 +323,25 @@ public class ProjectileBehaviour : MonoBehaviour
     void SpikeBehaviourFixed()
     {
         velocity.y -= spikeGravity * Time.fixedDeltaTime;
+    }
+
+    void HomerBehaviourFixed()
+    {
+        if (targetEnemy != null)
+        {
+            if (targetEnemy.health <= 0) DeActivate();
+            Vector2 dir = (targetEnemy.transform.position - transform.position).normalized;
+            float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            float currentAngle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+
+            float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, maxRotationSpeed * Time.deltaTime);
+            velocity = new Vector2(Mathf.Cos(newAngle * Mathf.Deg2Rad), Mathf.Sin(newAngle * Mathf.Deg2Rad)) * velocity.magnitude;
+
+            Vector2 direction = velocity.normalized;
+            transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+        }
+
+        velocity *= 1.008f;
     }
 
     IEnumerator RicoBounce(int direction, float distanceFromRebound)

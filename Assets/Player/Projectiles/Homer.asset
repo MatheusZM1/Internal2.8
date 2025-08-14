@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d07ed2f79eb3a4680b6aa6e4f68ea1, type: 3}
+  m_Name: Homer
+  m_EditorClassIdentifier: 
+  damage: 3.5
+  fireCooldown: 0.2
+  projectileSpeed: 6
+  speedVarianceMin: 0
+  speedVarianceMax: 0
+  playerSpeedModifier: 0.8
+  isPiercing: 0
+  pierceCooldown: 0
+  projectileCount: 1
+  range: 20
+  rangeVarianceMin: 0
+  rangeVarianceMax: 0
+  offsetList:
+  - {x: 0, y: 0}
+  angleVarianceList:
+  - 0
+  yVarianceMin: 0
+  yVarianceMax: 0
+  scaleMin: 1
+  scaleMax: 1
+  instanceCount: 16
+  doNotRotateSprite: 0

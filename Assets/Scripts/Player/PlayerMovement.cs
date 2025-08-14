@@ -572,6 +572,7 @@ public class PlayerMovement : MonoBehaviour
         bodyObj.transform.localPosition = Vector2.up * -0.25f;
         bodyObj.transform.eulerAngles = Vector3.zero;
         bodyObj.color = Color.black;
+        leftEar.color = bodyObj.color;
         rightEar.color = bodyObj.color;
         tail.startColor = bodyObj.color;
         tail.endColor = bodyObj.color;
