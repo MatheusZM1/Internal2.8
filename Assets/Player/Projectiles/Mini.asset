@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8d07ed2f79eb3a4680b6aa6e4f68ea1, type: 3}
-  m_Name: Sharpshooter
+  m_Name: Mini
   m_EditorClassIdentifier: 
-  damage: 4
-  fireCooldown: 0.133333
-  projectileSpeed: 15
+  damage: 3
+  fireCooldown: 0.1
+  projectileSpeed: 17
   speedVarianceMin: 0
   speedVarianceMax: 0
   playerSpeedModifier: 0.75
@@ -25,15 +25,13 @@ MonoBehaviour:
   rangeVarianceMin: 0
   rangeVarianceMax: 0
   offsetList:
-  - {x: 0.375, y: 0}
-  - {x: 0.375, y: 0.03125}
-  - {x: 0.375, y: 0}
-  - {x: 0.375, y: -0.03125}
+  - {x: 0, y: 0.125}
+  - {x: 0, y: -0.125}
   angleVarianceList:
   - 0
   yVarianceMin: 0
   yVarianceMax: 0
   scaleMin: 1
   scaleMax: 1
-  instanceCount: 20
+  instanceCount: 32
   doNotRotateSprite: 0
