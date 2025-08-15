@@ -139,6 +139,11 @@ public class PlayerMovement : MonoBehaviour
     {
         spriteObj.gameObject.SetActive(boolean);
         tail.gameObject.SetActive(boolean);
+
+        if (boolean)
+        {
+            transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
+        }
     }
 
     void Update()
@@ -165,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
             if (!GameManagerScript.instance.gamePaused) GameManagerScript.instance.PauseGame();
         }
 
-        if (Input.GetKeyDown("r"))
+        if (Input.GetKeyDown("r") && !isPlayerTwo)
         {
             Actions.levelReset?.Invoke();
         }
@@ -566,9 +571,17 @@ public class PlayerMovement : MonoBehaviour
 
     public void Respawn()
     {
+        if (isPlayerTwo && !GameManagerScript.instance.playerTwoExists) return;
+
         isAlive = true;
         GetComponent<PlayerHP>().UpdateHeath(3);
 
+        transform.position = startPos;
+        previousPosition = startPos;
+        currentPosition = startPos;
+        velocity = Vector2.zero;
+
+        spriteObj.transform.position = startPos + Vector2.up * 0.3125f;
         bodyObj.transform.localPosition = Vector2.up * -0.25f;
         bodyObj.transform.eulerAngles = Vector3.zero;
         bodyObj.color = Color.black;
@@ -576,9 +589,7 @@ public class PlayerMovement : MonoBehaviour
         rightEar.color = bodyObj.color;
         tail.startColor = bodyObj.color;
         tail.endColor = bodyObj.color;
-
-        transform.position = startPos;
-        velocity = Vector2.zero;
+        tail.transform.GetComponent<TailRenderer>().ResetTail(transform.position);
 
         weaponScript.LoadWeapons();
     }

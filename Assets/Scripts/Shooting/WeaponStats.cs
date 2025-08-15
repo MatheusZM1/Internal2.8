@@ -7,6 +7,7 @@ public class WeaponStats : ScriptableObject
     public float damage;
     public float fireCooldown;
     public float projectileSpeed;
+    public float projectileDuration;
 
     [Header("Speeds")]
     public float speedVarianceMin;

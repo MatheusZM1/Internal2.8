@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
@@ -63,5 +64,16 @@ public class TailRenderer : MonoBehaviour
             (2f * p0 - 5f * p1 + 4f * p2 - p3) * t * t +
             (-p0 + 3f * p1 - 3f * p2 + p3) * t * t * t
         );
+    }
+
+    public void ResetTail(Vector2 resetPosition)
+    {
+        foreach (var joint in tailJoints)
+        {
+            joint.parent.position = resetPosition;
+        }
+
+        Vector3[] positions = Enumerable.Repeat((Vector3)resetPosition, lineRenderer.positionCount).ToArray();
+        lineRenderer.SetPositions(positions);
     }
 }

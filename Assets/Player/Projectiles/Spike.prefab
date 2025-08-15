@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayerID: -1639870789
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 6286595657586805340, guid: 2a3e59d89fbe2ca4ca15b0f9adf9ca93, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f1dad589e34930948a3b4d48dbe14447, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -185,3 +185,4 @@ MonoBehaviour:
   spriteTransform: {fileID: 2438736213164076521}
   spriteRotationDelay: 0
   spikeGravity: 22
+  maxRotationSpeed: 0

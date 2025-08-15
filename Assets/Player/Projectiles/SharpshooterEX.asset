@@ -10,21 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8d07ed2f79eb3a4680b6aa6e4f68ea1, type: 3}
-  m_Name: Homer
+  m_Name: SharpshooterEX
   m_EditorClassIdentifier: 
-  damage: 3.5
-  fireCooldown: 0.2
-  projectileSpeed: 6
-  projectileDuration: 0
+  damage: 12
+  fireCooldown: 15
+  projectileSpeed: 20
   speedVarianceMin: 0
   speedVarianceMax: 0
-  playerSpeedModifier: 0.75
-  isPiercing: 0
-  pierceCooldown: 0
+  playerSpeedModifier: 0
+  isPiercing: 1
+  pierceCooldown: 0.1
   projectileCount: 1
-  range: 20
-  rangeVarianceMin: 0
-  rangeVarianceMax: 0
+  range: Infinity
   offsetList:
   - {x: 0, y: 0}
   angleVarianceList:
@@ -33,5 +30,5 @@ MonoBehaviour:
   yVarianceMax: 0
   scaleMin: 1
   scaleMax: 1
-  instanceCount: 16
+  instanceCount: 1
   doNotRotateSprite: 0

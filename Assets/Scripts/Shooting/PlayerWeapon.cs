@@ -255,6 +255,14 @@ public class PlayerWeapon : MonoBehaviour
 
             bulletPoolCount = primaryWeaponSelected ? EXPrimaryBulletPool.Count : EXSecondaryBulletPool.Count;
         }
+
+        ProjectileBehaviour bulletPrefab = primaryWeaponSelected ? EXPrimaryBulletPrefab : EXSecondaryBulletPrefab;
+
+        if (bulletPrefab.weaponType == ProjectileBehaviour.WeaponType.sweepEX)
+        {
+            playerScript.isJumping = false;
+            playerScript.velocity = Vector2.up * 20f;
+        }
     }
 
     public void ReturnBulletToPrimaryPool(ProjectileBehaviour bullet)

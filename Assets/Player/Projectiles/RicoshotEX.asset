@@ -10,18 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8d07ed2f79eb3a4680b6aa6e4f68ea1, type: 3}
-  m_Name: EXSharpshooter
+  m_Name: RicoshotEX
   m_EditorClassIdentifier: 
-  damage: 12
-  fireCooldown: 15
-  projectileSpeed: 20
+  damage: 1.5
+  fireCooldown: 18
+  projectileSpeed: 13
+  projectileDuration: 0
   speedVarianceMin: 0
   speedVarianceMax: 0
   playerSpeedModifier: 0
   isPiercing: 1
-  pierceCooldown: 0.1
+  pierceCooldown: 0.2
   projectileCount: 1
-  range: Infinity
+  range: 45
+  rangeVarianceMin: 0
+  rangeVarianceMax: 0
   offsetList:
   - {x: 0, y: 0}
   angleVarianceList:

@@ -21,16 +21,6 @@ public class Tail : MonoBehaviour
     [Header("Raycast")]
     public LayerMask groundMask;
 
-    private void OnEnable()
-    {
-        Actions.levelReset += Respawn;
-    }
-
-    private void OnDisable()
-    {
-        Actions.levelReset -= Respawn;
-    }
-
     private void FixedUpdate()
     {
         Vector3 direction = (targetPos.position + Vector3.up * 0.03125f) - transform.position;
@@ -45,10 +35,5 @@ public class Tail : MonoBehaviour
         else transform.position = Vector2.Lerp(transform.position, targetPos.position - (transform.right * distance), smoothing);
 
         sprite.transform.position = transform.position;
-    }
-
-    void Respawn()
-    {
-        transform.position = Vector3.zero;
     }
 }

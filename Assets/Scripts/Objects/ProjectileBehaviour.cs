@@ -15,7 +15,13 @@ public class ProjectileBehaviour : MonoBehaviour
         spike,
         homer,
         mini,
-        sharpEX
+        sharpEX,
+        ricoEX,
+        sweepEX,
+        bubbleEX,
+        spikeEX,
+        homerEX,
+        miniEX
     }
 
     BoxCollider2D bc;
@@ -31,6 +37,7 @@ public class ProjectileBehaviour : MonoBehaviour
     public Vector2 velocity;
     public float currentDamage;
     public float currentRange;
+    public float currentDuration;
 
     [Header("Pierce")]
     public float currentPierceCooldown;
@@ -99,10 +106,20 @@ public class ProjectileBehaviour : MonoBehaviour
             freezeMovementDuration -= Time.fixedDeltaTime;
         }
 
+        if (currentDuration > 0)
+        {
+            currentDuration -= Time.deltaTime;
+            if (currentDuration <= 0) // Disable projectile after it's life time ends
+            {
+                DeActivate();
+                return;
+            }
+        }
+
         if (currentPierceCooldown > 0)
         {
             currentPierceCooldown -= Time.fixedDeltaTime;
-            if (currentPierceCooldown <= 0.001f)
+            if (currentPierceCooldown <= 0.001f) // Disable projectile hitbox during pierce cooldown
             {
                 currentPierceCooldown = 0f;
                 bc.enabled = true;
@@ -111,13 +128,13 @@ public class ProjectileBehaviour : MonoBehaviour
 
         if (isColliding)
         {
-            if (!weaponStats.isPiercing)
+            if (!weaponStats.isPiercing) // Disable projectile on collision unless it can pierce
             {
                 DeActivate();
                 return;
             }
         }
-        if (isOffScreen)
+        if (isOffScreen) // Disable off screen projectiles (not spikes)
         {
             isOffScreen = false;
             if (weaponType != WeaponType.spike) DeActivate();
@@ -142,6 +159,10 @@ public class ProjectileBehaviour : MonoBehaviour
 
             case WeaponType.homer:
                 HomerBehaviourFixed();
+                break;
+
+            case WeaponType.ricoEX:
+                RicoBehaviourFixed();
                 break;
         }
 
@@ -217,6 +238,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
         currentDamage = weaponStats.damage;
         currentRange = weaponStats.range + Random.Range(weaponStats.rangeVarianceMin, weaponStats.rangeVarianceMax);
+        currentDuration = weaponStats.projectileDuration;
 
         if (weaponStats.doNotRotateSprite) spriteTransform.eulerAngles = Vector3.zero;
 
