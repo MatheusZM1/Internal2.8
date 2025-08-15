@@ -31,6 +31,11 @@ public class WeaponDisplay : MonoBehaviour
         secondaryMat = secondaryIcon.material;
     }
 
+    private void Start()
+    {
+        ResetSprites();
+    }
+
     private void OnEnable()
     {
         Actions.levelReset += ResetSprites;

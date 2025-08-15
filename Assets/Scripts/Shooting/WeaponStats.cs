@@ -39,4 +39,5 @@ public class WeaponStats : ScriptableObject
 
     [Header("Visuals")]
     public bool doNotRotateSprite;
+    public bool doNotFlipSprite;
 }

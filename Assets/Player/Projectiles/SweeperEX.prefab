@@ -90,6 +90,9 @@ MonoBehaviour:
     m_Bits: 3336
   spriteTransform: {fileID: 2022435595011613586}
   spriteRotationDelay: 0
+  torchMask:
+    serializedVersion: 2
+    m_Bits: 16384
   spikeGravity: 0
   maxRotationSpeed: 0
 --- !u!1 &9140794426257636299

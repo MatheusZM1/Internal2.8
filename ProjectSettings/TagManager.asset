@@ -7,6 +7,7 @@ TagManager:
   - Projectile
   - PlayerTwo
   - Enemy
+  - Torch
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Void
   - Enemy
   - Hurt
-  - 
+  - Torch
   - 
   - 
   - 

@@ -58,6 +58,9 @@ public class ProjectileBehaviour : MonoBehaviour
     int maxBounceIncrement;
 
     [Header("Bubble")]
+    public LayerMask torchMask;
+    public Sprite bubbleSprite;
+    public Sprite hotBubbleSprite;
     float extraInitialVelocity;
 
     [Header("Spike")]
@@ -137,7 +140,7 @@ public class ProjectileBehaviour : MonoBehaviour
         if (isOffScreen) // Disable off screen projectiles (not spikes)
         {
             isOffScreen = false;
-            if (weaponType != WeaponType.spike) DeActivate();
+            if (weaponType != WeaponType.spike && weaponType != WeaponType.bubbleEX) DeActivate();
             return;
         }
 
@@ -163,6 +166,18 @@ public class ProjectileBehaviour : MonoBehaviour
 
             case WeaponType.ricoEX:
                 RicoBehaviourFixed();
+                break;
+
+            case WeaponType.bubbleEX:
+                BubbleEXBehaviourFixed();
+                break;
+
+            case WeaponType.spikeEX:
+                SpikeBehaviourFixed();
+                break;
+
+            case WeaponType.homerEX:
+                HomerBehaviourFixed();
                 break;
         }
 
@@ -215,6 +230,8 @@ public class ProjectileBehaviour : MonoBehaviour
             else playerWeapon?.ReturnEXBulletSecondaryToPool(this);
         }
 
+        if (weaponType == WeaponType.bubble) transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = bubbleSprite; // Reset hot bubbles
+
         gameObject.SetActive(false);
     }
 
@@ -227,7 +244,7 @@ public class ProjectileBehaviour : MonoBehaviour
         velocity = Quaternion.Euler(0, 0, weaponStats.angleVarianceList[offsetIndex % weaponStats.angleVarianceList.Length]) * velocity; // Modify projectile direction based on variance index
 
         float angle = Mathf.Round(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
-        if (flipY) transform.localScale = new Vector3(1, -1, 1);
+        if (flipY && !weaponStats.doNotFlipSprite) transform.localScale = new Vector3(1, -1, 1);
         UpdateSpriteAngle();
 
         transform.position += Quaternion.Euler(0, 0, angle) * (weaponStats.offsetList[offsetIndex] + Vector2.up * Random.Range(weaponStats.yVarianceMin, weaponStats.yVarianceMax));
@@ -246,7 +263,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
         extraInitialVelocity = randomSpeedVariance;
 
-        if (weaponType == WeaponType.homer)
+        if (weaponType == WeaponType.homer || weaponType == WeaponType.homerEX)
         {
             var nearestEnemy = FindNearestEnemy();
             if (nearestEnemy != null) targetEnemy = nearestEnemy.GetComponent<EnemyHP>();
@@ -279,6 +296,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     void UpdateSpriteAngle()
     {
+        if (weaponStats.doNotFlipSprite) return;
         Vector2 direction = velocity.normalized;
         transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
         if (!Mathf.Approximately(direction.x, 0))
@@ -340,6 +358,32 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         velocity = velocity.normalized * (currentRange + 3f + extraInitialVelocity);
         if (currentRange <= 0.05) currentRange = -1f;
+
+        bool isTorched = Physics2D.OverlapBox(transform.position, bc.size, transform.eulerAngles.z, torchMask);
+
+        if (isTorched && currentDamage < 2)
+        {
+            currentDamage = 2;
+            transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = hotBubbleSprite;
+        }
+    }
+
+    void BubbleEXBehaviourFixed()
+    {
+        RaycastHit2D verticalRay = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.y * 0.51f, groundMask);
+
+        if (verticalRay.collider != null)
+        {
+            if (velocity.y < 0)
+            {
+                velocity.y = 0;
+                transform.position = new Vector2(transform.position.x, Mathf.Round((verticalRay.point.y + bc.size.y * 0.5f) * 32f) / 32f);
+            }
+        }
+        else
+        {
+            velocity.y -= spikeGravity * Time.fixedDeltaTime;
+        }
     }
 
     void SpikeBehaviourFixed()
@@ -351,7 +395,11 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         if (targetEnemy != null)
         {
-            if (targetEnemy.health <= 0) DeActivate();
+            if (targetEnemy.health <= 0)
+            {
+                targetEnemy = null;
+                return;
+            }
             Vector2 dir = (targetEnemy.transform.position - transform.position).normalized;
             float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             float currentAngle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
