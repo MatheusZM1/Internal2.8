@@ -591,6 +591,9 @@ public class PlayerMovement : MonoBehaviour
         tail.endColor = bodyObj.color;
         tail.transform.GetComponent<TailRenderer>().ResetTail(transform.position);
 
+        Actions.resetProjectiles?.Invoke();
         weaponScript.LoadWeapons();
+
+        inputLockedCooldown = 0.5f;
     }
 }

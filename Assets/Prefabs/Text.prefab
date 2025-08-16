@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2074290051721750221}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57210841550aeae49ac6f96315d0b4cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textToDisplay: Text
+  textToDisplay: LOADOUT
   alignment: 0
   centreLines: 0
   percent: 1
@@ -113,7 +113,7 @@ MonoBehaviour:
   charWidth: 8
   charHeight: 12
   spacing: 1
-  actualCharCount: 4
+  actualCharCount: 7
   waveAmplitude: 0
   waveFrequency: 0
   waveScrollSpeed: 0
@@ -128,4 +128,4 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 1313040563
   m_SortingLayer: 6
-  m_SortingOrder: 0
+  m_SortingOrder: 1

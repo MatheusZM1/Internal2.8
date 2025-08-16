@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6198629827353304585}
   - component: {fileID: 8299074763913357846}
   - component: {fileID: 3943216730529498521}
+  - component: {fileID: 1709717999789960470}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -80,7 +81,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &3943216730529498521
@@ -95,6 +96,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbc20c5f6c6a0346b7aede8822baa8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1709717999789960470
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554404534659236358}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cf59bf97d3cf3874fbfa9bd822f7f599, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7252594825632861854
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,5 +208,7 @@ MonoBehaviour:
   torchMask:
     serializedVersion: 2
     m_Bits: 16384
+  bubbleSprite: {fileID: 0}
+  hotBubbleSprite: {fileID: 0}
   spikeGravity: 0
   maxRotationSpeed: 0

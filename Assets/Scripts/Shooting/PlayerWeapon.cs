@@ -46,6 +46,8 @@ public class PlayerWeapon : MonoBehaviour
         primaryWeaponSelected = true;
         primaryOffsetIndex = 0;
         secondaryOffsetIndex = 0;
+        primaryCooldown = 0;
+        secondaryCooldown = 0;
 
         while (primaryBulletPool.Count > 0)
         {

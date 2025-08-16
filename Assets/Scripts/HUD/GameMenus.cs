@@ -30,7 +30,7 @@ public class GameMenus : MonoBehaviour
 
     private void Update()
     {
-        if (GameManagerScript.instance.gamePaused)
+        if (GameManagerScript.instance.gamePaused && !GameManagerScript.instance.loadoutOpen)
         {
             if (GameManagerScript.instance.backDown || GameManagerScript.instance.pauseDown)
             {
@@ -59,10 +59,12 @@ public class GameMenus : MonoBehaviour
                         Actions.levelReset?.Invoke();
                         break;
 
-                    case 2: // Options
+                    case 2: // Retry Loadout
+                        Actions.onLoadout?.Invoke();
                         break;
 
                     case 3: // Exit
+                        Application.Quit();
                         break;
                 }
             }
@@ -91,6 +93,7 @@ public class GameMenus : MonoBehaviour
                         break;
 
                     case 2: // Exit
+                        Application.Quit();
                         break;
                 }
             }

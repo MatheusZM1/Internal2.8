@@ -77,12 +77,12 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
-        Actions.levelReset += DeActivate;
+        Actions.resetProjectiles += DeActivate;
     }
 
     private void OnDisable()
     {
-        Actions.levelReset -= DeActivate;
+        Actions.resetProjectiles -= DeActivate;
     }
 
     private void Update()
@@ -91,6 +91,11 @@ public class ProjectileBehaviour : MonoBehaviour
         {
             case WeaponType.rico:
                 RicoBehaviour();
+                break;
+
+            case WeaponType.spike:
+            case WeaponType.spikeEX:
+                SpikeBehaviour();
                 break;
         }
     }
@@ -140,7 +145,7 @@ public class ProjectileBehaviour : MonoBehaviour
         if (isOffScreen) // Disable off screen projectiles (not spikes)
         {
             isOffScreen = false;
-            if (weaponType != WeaponType.spike && weaponType != WeaponType.bubbleEX) DeActivate();
+            if (weaponType != WeaponType.spike && weaponType != WeaponType.bubbleEX && weaponType != WeaponType.spikeEX) DeActivate();
             return;
         }
 
@@ -173,7 +178,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 break;
 
             case WeaponType.spikeEX:
-                SpikeBehaviourFixed();
+                SpikeBehaviourEXFixed();
                 break;
 
             case WeaponType.homerEX:
@@ -371,14 +376,10 @@ public class ProjectileBehaviour : MonoBehaviour
     void BubbleEXBehaviourFixed()
     {
         RaycastHit2D verticalRay = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.y * 0.51f, groundMask);
-
         if (verticalRay.collider != null)
         {
-            if (velocity.y < 0)
-            {
-                velocity.y = 0;
-                transform.position = new Vector2(transform.position.x, Mathf.Round((verticalRay.point.y + bc.size.y * 0.5f) * 32f) / 32f);
-            }
+            velocity.y = 0;
+            transform.position = new Vector2(transform.position.x, Mathf.Round((verticalRay.point.y + bc.size.y * 0.5f) * 32f) / 32f);
         }
         else
         {
@@ -386,9 +387,32 @@ public class ProjectileBehaviour : MonoBehaviour
         }
     }
 
+    void SpikeBehaviour()
+    {
+        spriteTransform.eulerAngles += Vector3.forward * 400f * Time.deltaTime;
+    }
+
     void SpikeBehaviourFixed()
     {
         velocity.y -= spikeGravity * Time.fixedDeltaTime;
+    }
+
+    void SpikeBehaviourEXFixed()
+    {
+        isColliding = false;
+        velocity.y -= spikeGravity * Time.fixedDeltaTime;
+
+        RaycastHit2D horizontalRay = Physics2D.Raycast(transform.position, Vector2.right * Mathf.Sign(velocity.x), Mathf.Abs(velocity.x) * Time.fixedDeltaTime + bc.size.x * 0.51f, groundMask);
+        RaycastHit2D verticalRay = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Abs(velocity.y) * Time.fixedDeltaTime + bc.size.y * 0.51f, groundMask);
+
+        if (horizontalRay.collider != null)
+        {
+            velocity.x *= -1;
+        }
+        if (verticalRay.collider != null)
+        {
+            velocity.y = Mathf.Max(7, -velocity.y * 0.75f);
+        }
     }
 
     void HomerBehaviourFixed()
@@ -406,10 +430,10 @@ public class ProjectileBehaviour : MonoBehaviour
 
             float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, maxRotationSpeed * Time.deltaTime);
             velocity = new Vector2(Mathf.Cos(newAngle * Mathf.Deg2Rad), Mathf.Sin(newAngle * Mathf.Deg2Rad)) * velocity.magnitude;
-
-            Vector2 direction = velocity.normalized;
-            transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
         }
+
+        Vector2 direction = velocity.normalized;
+        transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
 
         velocity *= 1.008f;
     }

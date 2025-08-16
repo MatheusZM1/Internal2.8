@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8d07ed2f79eb3a4680b6aa6e4f68ea1, type: 3}
   m_Name: SpikeEX
   m_EditorClassIdentifier: 
-  damage: 35
-  fireCooldown: 13
+  damage: 8
+  fireCooldown: 10
   projectileSpeed: 14
-  projectileDuration: 0
+  projectileDuration: 4
   speedVarianceMin: 0
   speedVarianceMax: 0
   playerSpeedModifier: 0
-  isPiercing: 0
-  pierceCooldown: 0
+  isPiercing: 1
+  pierceCooldown: 0.5
   projectileCount: 1
   range: Infinity
   rangeVarianceMin: 0
   rangeVarianceMax: 0
   offsetList:
-  - {x: 0, y: 0}
+  - {x: 0.5, y: 0}
   angleVarianceList:
   - 0
   yVarianceMin: 0
@@ -34,5 +34,5 @@ MonoBehaviour:
   scaleMin: 1
   scaleMax: 1
   instanceCount: 1
-  doNotRotateSprite: 0
+  doNotRotateSprite: 1
   doNotFlipSprite: 0

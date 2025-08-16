@@ -15,6 +15,7 @@ MonoBehaviour:
   damage: 4
   fireCooldown: 0.33
   projectileSpeed: 14
+  projectileDuration: 0
   speedVarianceMin: 0
   speedVarianceMax: 0
   playerSpeedModifier: 0.6
@@ -38,3 +39,4 @@ MonoBehaviour:
   scaleMax: 1
   instanceCount: 24
   doNotRotateSprite: 1
+  doNotFlipSprite: 0

@@ -271,7 +271,15 @@ public class LoadoutMenu : MonoBehaviour
         isOpen = false;
 
         loadoutsOpen--;
-        if (loadoutsOpen == 0) GameManagerScript.instance.loadoutOpen = false;
+        if (loadoutsOpen == 0)
+        {
+            GameManagerScript.instance.loadoutOpen = false;
+            if (GameManagerScript.instance.gamePaused)
+            {
+                GameManagerScript.instance.PauseGame();
+                Actions.levelReset?.Invoke();
+            }
+        }
     }
 
 
