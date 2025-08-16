@@ -25,6 +25,7 @@ public class LoadoutMenu : MonoBehaviour
     public int menuSelected;
     public int itemSelected;
     public SpriteRenderer selectedSprite, equippedSprite;
+    public SpriteFontMesh selectedText;
 
     [Header("Input")]
     public float horizontal;
@@ -126,11 +127,13 @@ public class LoadoutMenu : MonoBehaviour
             {
                 menuSelected = Mathf.Clamp(menuSelected + 1, 0, 2);
                 movedHorizontalCooldown = 0.25f;
+                UpdateMenuText();
             }
             else if (horizontal < 0)
             {
                 menuSelected = Mathf.Clamp(menuSelected - 1, 0, 2);
                 movedHorizontalCooldown = 0.25f;
+                UpdateMenuText();
             }
         }
         selectedSprite.transform.position = menuIcons[menuSelected].transform.position;
@@ -165,6 +168,24 @@ public class LoadoutMenu : MonoBehaviour
         }
     }
 
+    void UpdateMenuText()
+    {
+        switch (menuSelected)
+        {
+            case 0:
+                selectedText.GenerateText("Weapon A");
+                break;
+
+            case 1:
+                selectedText.GenerateText("Weapon B");
+                break;
+
+            case 2:
+                selectedText.GenerateText("Buff");
+                break;
+        }
+    }
+
     void UpdateWeapons(int weaponIndex)
     {
         if (movedHorizontalCooldown <= 0)
@@ -173,11 +194,13 @@ public class LoadoutMenu : MonoBehaviour
             {
                 itemSelected = Mathf.Clamp(itemSelected + 1, 0, 6);
                 movedHorizontalCooldown = 0.25f;
+                UpdateWeaponsText();
             }
             else if(horizontal < 0)
             {
                 itemSelected = Mathf.Clamp(itemSelected - 1, 0, 6);
                 movedHorizontalCooldown = 0.25f;
+                UpdateWeaponsText();
             }
         }
 
@@ -187,11 +210,13 @@ public class LoadoutMenu : MonoBehaviour
             {
                 itemSelected = Mathf.Clamp(itemSelected - 4, 0, 6);
                 movedVerticalCooldown = 0.25f;
+                UpdateWeaponsText();
             }
             else if (vertical < 0 && itemSelected < 4)
             {
                 itemSelected = Mathf.Clamp(itemSelected + 4, 0, 6);
                 movedVerticalCooldown = 0.25f;
+                UpdateWeaponsText();
             }
         }
 
@@ -216,6 +241,40 @@ public class LoadoutMenu : MonoBehaviour
                 else LoadoutManager.instance.SetSelectedSecondaryP2(itemSelected);
             }
             equippedSprite.transform.position = weaponIcons[itemSelected].transform.position;
+        }
+    }
+
+    void UpdateWeaponsText()
+    {
+        switch (itemSelected)
+        {
+            case 0:
+                selectedText.GenerateText("\\c1Sharpshooter\\c0\nAccurate long-ranged shots\nEX: Heavy latching drill");
+                break;
+
+            case 1:
+                selectedText.GenerateText("\\c2Ricoshot\\c0\nShots reflect off walls\nand screen borders\nEX: Piercing rico-shot");
+                break;
+
+            case 2:
+                selectedText.GenerateText("\\c3Sweeper\\c0\nSpread short-ranged shots\nEX: Propelling explosion");
+                break;
+
+            case 3:
+                selectedText.GenerateText("\\c4Bubblegun\\c0\nQuick-fire lingering shots\nEX: Deployable amplifier");
+                break;
+
+            case 4:
+                selectedText.GenerateText("\\c5Spike Launcher\\c0\nHeavy-blow arching shots\nEX: Large bouncy shot");
+                break;
+
+            case 5:
+                selectedText.GenerateText("\\c6Homer\\c0\nLight auto-aim shots\nEX: Radial spread burst");
+                break;
+
+            case 6:
+                selectedText.GenerateText("\\c7Mini-gun\\c0\nSpeedy spam of shots\nEX: Dual-direction shots");
+                break;
         }
     }
 
@@ -310,6 +369,7 @@ public class LoadoutMenu : MonoBehaviour
                 weaponsContainer.SetActive(true);
                 if (!isPlayerTwo) itemSelected = LoadoutManager.instance.primaryP1;
                 else itemSelected = LoadoutManager.instance.primaryP2;
+                UpdateWeaponsText();
                 equippedSprite.transform.position = weaponIcons[itemSelected].transform.position;
                 break;
 
@@ -317,6 +377,7 @@ public class LoadoutMenu : MonoBehaviour
                 weaponsContainer.SetActive(true);
                 if (!isPlayerTwo) itemSelected = LoadoutManager.instance.secondaryP1;
                 else itemSelected = LoadoutManager.instance.secondaryP2;
+                UpdateWeaponsText();
                 equippedSprite.transform.position = weaponIcons[itemSelected].transform.position;
                 break;
 
