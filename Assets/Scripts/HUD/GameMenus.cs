@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameMenus : MonoBehaviour
 {
@@ -64,7 +65,11 @@ public class GameMenus : MonoBehaviour
                         break;
 
                     case 3: // Exit
-                        Application.Quit();
+                        GameManagerScript.instance.UnpauseGameInstant();
+                        Actions.levelReset?.Invoke();
+                        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+                        int nextSceneIndex = (currentSceneIndex == 0) ? 1 : 0;
+                        SceneManager.LoadScene(nextSceneIndex);
                         break;
                 }
             }

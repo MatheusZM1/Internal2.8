@@ -83,15 +83,7 @@ public class InputScript : MonoBehaviour
     {
         if (device is Gamepad)
         {
-            switch (change)
-            {
-                case InputDeviceChange.Added:
-                    AssignController();
-                    break;
-                case InputDeviceChange.Reconnected:
-                    AssignController();
-                    break;
-            }
+            AssignController();
         }
     }
 

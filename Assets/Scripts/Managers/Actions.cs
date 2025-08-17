@@ -9,6 +9,7 @@ public static class Actions
     public static Action startLevel;
     public static Action resetProjectiles;
     public static Action levelReset;
+    public static Action levelEnd;
 
     // Game menus
     public static Action<bool> onGamePause;

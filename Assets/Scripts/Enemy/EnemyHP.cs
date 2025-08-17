@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyHP : MonoBehaviour
 {
     [Header("Health")]
+    public bool isBoss;
     public float startHealth;
     public float health;
     public BoxCollider2D targetWall;
@@ -36,7 +37,7 @@ public class EnemyHP : MonoBehaviour
 
         if (health <= 0)
         {
-            spriteRenderer.enabled = false;
+            if (!isBoss) spriteRenderer.enabled = false;
             GetComponent<Collider2D>().enabled = false;
             if (targetWall != null) targetWall.gameObject.SetActive(false);
         }

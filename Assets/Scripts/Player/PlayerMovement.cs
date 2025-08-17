@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 previousPosition;
     Vector2 currentPosition;
 
-    void Start()
+    private void Awake()
     {
         inputScript = GetComponent<InputScript>();
 
@@ -105,7 +105,10 @@ public class PlayerMovement : MonoBehaviour
         eyeStartScale = leftEye.transform.localScale;
 
         isAlive = true;
+    }
 
+    void Start()
+    {
         if (isPlayerTwo)
         {
             otherPlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
@@ -141,8 +144,9 @@ public class PlayerMovement : MonoBehaviour
     {
         spriteObj.gameObject.SetActive(boolean);
         tail.gameObject.SetActive(boolean);
+        healthScript.enabled = boolean;
 
-        if (boolean)
+        if (boolean && Time.time > 1f)
         {
             transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
         }
@@ -525,8 +529,8 @@ public class PlayerMovement : MonoBehaviour
             leftEye.transform.localScale = new Vector2(currentSquish.x, currentSquish.y);
             rightEye.transform.localScale = new Vector2(currentSquish.x, currentSquish.y);
 
-            leftEye.color = Color.Lerp(Color.white, new Color(1, 0.3f, 0.3f), MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
-            rightEye.color = Color.Lerp(Color.white, new Color(1, 0.3f, 0.3f), MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
+            leftEye.color = Color.Lerp(isPlayerTwo ? Color.black : Color.white, new Color(1, 0.3f, 0.3f), MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
+            rightEye.color = Color.Lerp(isPlayerTwo ? Color.black : Color.white, new Color(1, 0.3f, 0.3f), MathFunctions.SineInOut(Mathf.PingPong(t * 2, 1f)));
 
             yield return null;
         }
@@ -549,7 +553,7 @@ public class PlayerMovement : MonoBehaviour
             t += Time.deltaTime * 3;
             bodyObj.transform.localPosition = Vector2.Lerp(Vector2.up * -0.25f, new Vector2(0, -0.35f), MathFunctions.EaseIn(t, 2));
             bodyObj.transform.eulerAngles = Vector3.forward * Mathf.Lerp(0, -90 * directionFacing.x, MathFunctions.EaseIn(t, 2));
-            bodyObj.color = Color.Lerp(Color.black, new Color(0.5f, 0f, 0f), MathFunctions.EaseIn(t, 2));
+            bodyObj.color = Color.Lerp(isPlayerTwo ? Color.white : Color.black, new Color(0.5f, 0f, 0f), MathFunctions.EaseIn(t, 2));
             leftEar.color = bodyObj.color;
             rightEar.color = bodyObj.color;
             tail.startColor = bodyObj.color;
@@ -577,6 +581,7 @@ public class PlayerMovement : MonoBehaviour
 
         isAlive = true;
         GetComponent<PlayerHP>().UpdateHeath(3);
+        GetComponent<PlayerHP>().currentInvulnaribilityDuration = 0.01f;
 
         transform.position = startPos;
         previousPosition = startPos;
@@ -586,7 +591,7 @@ public class PlayerMovement : MonoBehaviour
         spriteObj.transform.position = startPos + Vector2.up * 0.3125f;
         bodyObj.transform.localPosition = Vector2.up * -0.25f;
         bodyObj.transform.eulerAngles = Vector3.zero;
-        bodyObj.color = Color.black;
+        bodyObj.color = isPlayerTwo ? Color.white : Color.black;
         leftEar.color = bodyObj.color;
         rightEar.color = bodyObj.color;
         tail.startColor = bodyObj.color;

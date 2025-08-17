@@ -253,7 +253,7 @@ public class ProjectileBehaviour : MonoBehaviour
         UpdateSpriteAngle();
 
         transform.position += Quaternion.Euler(0, 0, angle) * (weaponStats.offsetList[offsetIndex] + Vector2.up * Random.Range(weaponStats.yVarianceMin, weaponStats.yVarianceMax));
-        transform.localScale *= Random.Range(weaponStats.scaleMin, weaponStats.scaleMax);
+        transform.localScale = Vector3.one * Random.Range(weaponStats.scaleMin, weaponStats.scaleMax);
 
         bc.enabled = true;
         currentPierceCooldown = 0f;

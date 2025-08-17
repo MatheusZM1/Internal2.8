@@ -112,7 +112,9 @@ public class GameManagerScript : MonoBehaviour
         while (stableFrameCount < stableFramesRequired)
         {
             if (Time.deltaTime < maxDeltaTime)
+            {
                 stableFrameCount++;
+            }
             else
                 stableFrameCount = 0;
 
@@ -132,6 +134,22 @@ public class GameManagerScript : MonoBehaviour
     public void PauseGame()
     {
         StartCoroutine(PauseCoroutine());
+    }
+
+    public void UnpauseGameInstant()
+    {
+        gamePaused = !gamePaused;
+
+        if (gamePaused)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+
+        Actions.onGamePause?.Invoke(gamePaused);
     }
 
     IEnumerator PauseCoroutine()

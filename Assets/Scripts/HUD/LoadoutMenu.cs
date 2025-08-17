@@ -47,11 +47,13 @@ public class LoadoutMenu : MonoBehaviour
     private void OnEnable()
     {
         Actions.onLoadout += OpenLoadout;
+        Actions.onPlayerTwoConnect += CheckLoadoutTwo;
     }
 
     private void OnDisable()
     {
         Actions.onLoadout -= OpenLoadout;
+        Actions.onPlayerTwoConnect -= CheckLoadoutTwo;
     }
 
     private void Update()
@@ -315,6 +317,14 @@ public class LoadoutMenu : MonoBehaviour
         GameManagerScript.instance.loadoutOpen = true;
 
         loadoutsOpen++;
+    }
+
+    void CheckLoadoutTwo(bool playerTwoConnected)
+    {
+        if (!playerTwoConnected && isOpen)
+        {
+            CloseLoadout();
+        }
     }
 
     void CloseLoadout()

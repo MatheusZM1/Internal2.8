@@ -10,7 +10,7 @@ public class PlayerHP : MonoBehaviour
     [Header("Health")]
     public int health;
     public float invulnarabilityDuration;
-    float currentInvulnaribilityDuration;
+    public float currentInvulnaribilityDuration;
     public LayerMask hurtMask;
 
     [Header("UI Visuals")]
