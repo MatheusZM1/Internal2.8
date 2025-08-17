@@ -14,6 +14,10 @@ public class CameraBehaviour : MonoBehaviour
     PlayerMovement player;
     PlayerMovement playerTwo;
 
+    [Header("Camera Modes")]
+    public bool followPlayers;
+    public bool preventBacktracking;
+
     private void Awake()
     {
         cam = GetComponent<Camera>();
@@ -39,10 +43,16 @@ public class CameraBehaviour : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float averageX = (player.transform.position.x + playerTwo.transform.position.x) * 0.5f;
-        if (player.isAlive && !playerTwo.isAlive || !GameManagerScript.instance.playerTwoExists) averageX = player.transform.position.x;
-        else if (!player.isAlive && playerTwo.isAlive) averageX = playerTwo.transform.position.x;
-        targetPosition = new Vector3(averageX, transform.position.y, transform.position.z);
+        if (followPlayers)
+        {
+            float averageX = (player.transform.position.x + playerTwo.transform.position.x) * 0.5f;
+            if (player.isAlive && !playerTwo.isAlive || !GameManagerScript.instance.playerTwoExists) averageX = player.transform.position.x;
+            else if (!player.isAlive && playerTwo.isAlive) averageX = playerTwo.transform.position.x;
+
+            if (targetPosition.x < transform.position.x && preventBacktracking) targetPosition.x = transform.position.x; // Prevents backtracking
+
+            targetPosition = new Vector3(averageX, transform.position.y, transform.position.z);
+        }
     }
 
     private Vector3 velocity = Vector3.zero;
@@ -50,7 +60,10 @@ public class CameraBehaviour : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+        if (followPlayers)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+        }
     }
 
     void Respawn()

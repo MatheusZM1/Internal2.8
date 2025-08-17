@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4924026826868081130
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4924026826868081129}
+  - component: {fileID: 4924026826868081128}
+  - component: {fileID: 4924026826868081127}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4924026826868081129
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924026826868081130}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.5866469, y: -1.2737101, z: -15.330844}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4924026826868081128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924026826868081130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77873a2871c9e7346aed308ba3be9d5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontal: 0
+  vertical: 0
+  selectDown: 0
+  selectHold: 0
+  backDown: 0
+  backHold: 0
+  pauseDown: 0
+  pauseHold: 0
+  horizontalPositiveKey: right
+  horizontalNegativeKey: left
+  verticalPositiveKey: up
+  verticalNegativeKey: down
+  selectKey: a
+  backKey: s
+  pauseKey: return
+  playerTwoExists: 0
+  gamePaused: 0
+  gameDead: 0
+  loadoutOpen: 0
+--- !u!114 &4924026826868081127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924026826868081130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bf3eedd02fcd5f4b8e24a971fe4e84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayerTwo: 0
+  isAnyPlayer: 1
+  horizontalPositiveKey: right
+  horizontalNegativeKey: left
+  verticalPositiveKey: up
+  verticalNegativeKey: down
+  selectKey: a
+  backKey: s
+  axisRaw: 0
+  selectDown: 0
+  selectHold: 0
+  backDown: 0
+  backHold: 0

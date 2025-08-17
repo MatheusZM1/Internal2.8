@@ -121,6 +121,8 @@ public class PlayerMovement : MonoBehaviour
         {
             PlayerTwoConnects(false);
         }
+
+        GameManagerScript.instance.StartLevel();
     }
 
     private void OnEnable()
@@ -595,5 +597,7 @@ public class PlayerMovement : MonoBehaviour
         weaponScript.LoadWeapons();
 
         inputLockedCooldown = 0.5f;
+
+        GameManagerScript.instance.StartLevel();
     }
 }

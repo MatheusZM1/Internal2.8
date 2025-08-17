@@ -54,7 +54,7 @@ public class EnemyHP : MonoBehaviour
         while (t < 1)
         {
             t += Time.deltaTime / flashDuration;
-            flashMaterial.SetFloat("_BrightFx", Mathf.Lerp(0.2f, 0, t));
+            flashMaterial.SetFloat("_BrightFx", Mathf.Lerp(0.1f, 0, t));
             yield return null;
         }
 

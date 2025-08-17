@@ -97,6 +97,31 @@ public class GameManagerScript : MonoBehaviour
         else pauseHold = false;
     }
 
+    public void StartLevel()
+    {
+        StartCoroutine(InitLevel());
+    }
+
+    IEnumerator InitLevel()
+    {
+        float maxDeltaTime = 0.05f; // Lag threshold
+        int stableFramesRequired = 5;
+        int stableFrameCount = 0;
+
+        // Wait until frame rate stabilizes
+        while (stableFrameCount < stableFramesRequired)
+        {
+            if (Time.deltaTime < maxDeltaTime)
+                stableFrameCount++;
+            else
+                stableFrameCount = 0;
+
+            yield return null;
+        }
+
+        Actions.startLevel?.Invoke();
+    }
+
     void ResetLevel()
     {
         gameDead = false;

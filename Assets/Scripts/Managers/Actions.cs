@@ -6,6 +6,7 @@ public static class Actions
     public static Action<bool> onPlayerTwoConnect;
 
     // Game
+    public static Action startLevel;
     public static Action resetProjectiles;
     public static Action levelReset;
 
