@@ -323,7 +323,7 @@ public class LoadoutMenu : MonoBehaviour
     {
         if (!playerTwoConnected && isOpen)
         {
-            CloseLoadout();
+            CloseLoadoutTwoInstant();
         }
     }
 
@@ -340,7 +340,7 @@ public class LoadoutMenu : MonoBehaviour
         isOpen = false;
 
         loadoutsOpen--;
-        if (loadoutsOpen == 0)
+        if (loadoutsOpen <= 0)
         {
             GameManagerScript.instance.loadoutOpen = false;
             if (GameManagerScript.instance.gamePaused)
@@ -349,6 +349,13 @@ public class LoadoutMenu : MonoBehaviour
                 Actions.levelReset?.Invoke();
             }
         }
+    }
+
+    void CloseLoadoutTwoInstant()
+    {
+        masterContainer.SetActive(false);
+        isOpen = false;
+        loadoutsOpen--;
     }
 
 

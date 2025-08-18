@@ -64,7 +64,7 @@ public class GameMenus : MonoBehaviour
                         Actions.onLoadout?.Invoke();
                         break;
 
-                    case 3: // Exit
+                    case 3: // Change scene
                         GameManagerScript.instance.UnpauseGameInstant();
                         Actions.levelReset?.Invoke();
                         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -97,8 +97,11 @@ public class GameMenus : MonoBehaviour
                         Actions.onLoadout?.Invoke();
                         break;
 
-                    case 2: // Exit
-                        Application.Quit();
+                    case 2: // Change scene
+                        Actions.levelReset?.Invoke();
+                        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+                        int nextSceneIndex = (currentSceneIndex == 0) ? 1 : 0;
+                        SceneManager.LoadScene(nextSceneIndex);
                         break;
                 }
             }

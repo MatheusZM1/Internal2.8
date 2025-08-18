@@ -36,6 +36,8 @@ public class TreeBoss : MonoBehaviour
         healthScript = GetComponent<EnemyHP>();
         col = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
+
+        Restart();
     }
 
     private void OnEnable()
@@ -53,6 +55,7 @@ public class TreeBoss : MonoBehaviour
     void IntroFunc()
     {
         StopAllCoroutines();
+        Restart();
         IntroCoroutine = StartCoroutine(Intro());
     }
 

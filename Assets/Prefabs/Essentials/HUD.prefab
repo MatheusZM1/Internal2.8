@@ -274,10 +274,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f12ce183ae34c21459903e1e5909d5bc, type: 3}
   - {fileID: 21300000, guid: 85207f8ca0ecec444a1a5d02a328e2c8, type: 3}
   - {fileID: 21300000, guid: ac72daf3ec8dae343a2e242133ce6b64, type: 3}
-  - {fileID: 21300000, guid: 9493c77a6ccceea4faecb860d5b3626f, type: 3}
-  - {fileID: 21300000, guid: 9493c77a6ccceea4faecb860d5b3626f, type: 3}
-  - {fileID: 21300000, guid: 9493c77a6ccceea4faecb860d5b3626f, type: 3}
-  - {fileID: 21300000, guid: 9493c77a6ccceea4faecb860d5b3626f, type: 3}
+  - {fileID: 21300000, guid: 7847f9692eb15fa44857a33cb0d37da9, type: 3}
+  - {fileID: 21300000, guid: c4ca195fca4b2bb47986e03fa0f77fb2, type: 3}
+  - {fileID: 21300000, guid: ac1298caedd52c14d861640bf5e0472b, type: 3}
+  - {fileID: 21300000, guid: 8c18cb5a37ee39340b21efe9a9567361, type: 3}
   arrowIcon: {fileID: 3471025959448336709}
   primaryIcon: {fileID: 3471025959749784347}
   secondaryIcon: {fileID: 3471025959049647499}
@@ -1444,10 +1444,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3471025959846526595}
     m_Modifications:
-    - target: {fileID: 6480181841608730852, guid: f96a3877d1a4636468df1160b6e0f278, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6480181841693758532, guid: f96a3877d1a4636468df1160b6e0f278, type: 3}
       propertyPath: m_Name
       value: Loadout P2
