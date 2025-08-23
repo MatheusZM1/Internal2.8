@@ -13,8 +13,10 @@ public class LoadoutManager : MonoBehaviour
     [Header("Player Selection Info")]
     public int primaryP1;
     public int secondaryP1;
+    public int buffP1;
     public int primaryP2;
     public int secondaryP2;
+    public int buffP2;
 
     private void Awake()
     {
@@ -31,8 +33,10 @@ public class LoadoutManager : MonoBehaviour
 
         primaryP1 = 0;
         secondaryP1 = 1;
+        buffP1 = 0;
         primaryP2 = 0;
         secondaryP2 = 1;
+        buffP2 = 0;
     }
 
     public void SetSelectedPrimaryP1(int newSelection)
@@ -47,6 +51,11 @@ public class LoadoutManager : MonoBehaviour
         secondaryP1 = newSelection;
     }
 
+    public void SetSelectedBuffP1(int newSelection)
+    {
+        buffP1 = newSelection;
+    }
+
     public void SetSelectedPrimaryP2(int newSelection)
     {
         if (secondaryP2 == newSelection) secondaryP2 = primaryP2; // Swap weapons to prevent double ups
@@ -57,6 +66,11 @@ public class LoadoutManager : MonoBehaviour
     {
         if (primaryP2 == newSelection) primaryP2 = secondaryP2; // Swap weapons to prevent double ups
         secondaryP2 = newSelection;
+    }
+
+    public void SetSelectedBuffP2(int newSelection)
+    {
+        buffP2 = newSelection;
     }
 
     public ProjectileBehaviour GetPrimaryNormal(bool isPlayerTwo)

@@ -301,17 +301,29 @@ public class SpriteFontMesh : MonoBehaviour
         // Iterate over the original text which contains inline control codes.
         for (int i = 0; i < text.Length; i++)
         {
-            // Look for a control code: check if we have "\c" followed by a digit.
+            // Look for a control code: check if we have "\c" followed by at least one digit.
             if (text[i] == '\\' && i + 2 < text.Length && text[i + 1] == 'c' && char.IsDigit(text[i + 2]))
             {
-                // Get the digit, convert to int and ensure it's within bounds.
-                int colorIndex = text[i + 2] - '0';
+                // Start reading digits after \c
+                int start = i + 2;
+                int end = start;
+                while (end < text.Length && char.IsDigit(text[end]))
+                {
+                    end++;
+                }
+
+                // Parse the number between start and end
+                string numberStr = text.Substring(start, end - start);
+                int colorIndex = int.Parse(numberStr);
+
+                // Check bounds
                 if (colorIndex >= 0 && colorIndex < characterColors.Count)
                 {
                     currentColor = characterColors[colorIndex] * new Color(1, 1, 1, alpha);
                 }
-                // Skip the control code characters.
-                i += 2;
+
+                // Skip past \c and all digits we just read
+                i = end - 1;
                 continue;
             }
 

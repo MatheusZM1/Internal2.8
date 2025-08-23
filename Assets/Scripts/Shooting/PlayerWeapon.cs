@@ -90,6 +90,8 @@ public class PlayerWeapon : MonoBehaviour
             bullet.isPrimary = true;
             bullet.isEX = false;
             bullet.playerWeapon = this;
+            if (!playerScript.isPlayerTwo) bullet.damageMultiplier = LoadoutManager.instance.buffP1 == 0 ? 1.1f : 1;
+            else bullet.damageMultiplier = LoadoutManager.instance.buffP2 == 0 ? 1.1f : 1;
 
             bullet.gameObject.SetActive(false); // Deactivate initially
             primaryBulletPool.Enqueue(bullet); // Add to pool
@@ -101,6 +103,8 @@ public class PlayerWeapon : MonoBehaviour
             bullet.isPrimary = false;
             bullet.isEX = false;
             bullet.playerWeapon = this;
+            if (!playerScript.isPlayerTwo) bullet.damageMultiplier = LoadoutManager.instance.buffP1 == 0 ? 1.1f : 1;
+            else bullet.damageMultiplier = LoadoutManager.instance.buffP2 == 0 ? 1.1f : 1;
 
             bullet.gameObject.SetActive(false); // Deactivate initially
             secondaryBulletPool.Enqueue(bullet); // Add to pool
@@ -112,6 +116,8 @@ public class PlayerWeapon : MonoBehaviour
             bullet.isPrimary = true;
             bullet.isEX = true;
             bullet.playerWeapon = this;
+            if (!playerScript.isPlayerTwo) bullet.damageMultiplier = LoadoutManager.instance.buffP1 == 0 ? 1.1f : 1;
+            else bullet.damageMultiplier = LoadoutManager.instance.buffP2 == 0 ? 1.1f : 1;
 
             bullet.gameObject.SetActive(false); // Deactivate initially
             EXPrimaryBulletPool.Enqueue(bullet); // Add to pool
@@ -123,6 +129,8 @@ public class PlayerWeapon : MonoBehaviour
             bullet.isPrimary = false;
             bullet.isEX = true;
             bullet.playerWeapon = this;
+            if (!playerScript.isPlayerTwo) bullet.damageMultiplier = LoadoutManager.instance.buffP1 == 0 ? 1.1f : 1;
+            else bullet.damageMultiplier = LoadoutManager.instance.buffP2 == 0 ? 1.1f : 1;
 
             bullet.gameObject.SetActive(false); // Deactivate initially
             EXSecondaryBulletPool.Enqueue(bullet); // Add to pool

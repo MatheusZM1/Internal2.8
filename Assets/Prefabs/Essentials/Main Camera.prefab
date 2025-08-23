@@ -295,6 +295,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPositon: {x: 0, y: 0, z: 0}
   targetPosition: {x: 0, y: 0, z: 0}
+  followPlayers: 0
+  preventBacktracking: 0
   smoothTime: 0.1
 --- !u!1 &9140750699895687182
 GameObject:
@@ -400,6 +402,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3471025958777353803, guid: a5b6105f5c0d07648b65ad072fbc6df3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3471025959107189749, guid: a5b6105f5c0d07648b65ad072fbc6df3, type: 3}
       propertyPath: m_Name
       value: HUD
@@ -447,6 +453,10 @@ PrefabInstance:
     - target: {fileID: 3471025959107189754, guid: a5b6105f5c0d07648b65ad072fbc6df3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7621696634210559616, guid: a5b6105f5c0d07648b65ad072fbc6df3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5b6105f5c0d07648b65ad072fbc6df3, type: 3}

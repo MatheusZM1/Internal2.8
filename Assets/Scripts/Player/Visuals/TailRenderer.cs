@@ -18,7 +18,7 @@ public class TailRenderer : MonoBehaviour
     private LineRenderer lineRenderer;
     private List<Vector3> smoothPoints = new List<Vector3>();
 
-    void Start()
+    void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.material = tailMaterial;

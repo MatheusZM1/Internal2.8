@@ -25,13 +25,20 @@ public class PlayerHP : MonoBehaviour
     {
         playerScript = GetComponent<PlayerMovement>();
         bc = GetComponent<BoxCollider2D>();
+    }
 
-        health = 3;
+    public void Init()
+    {
+        currentInvulnaribilityDuration = 0.05f;
+
+        int maxHealth = LoadoutManager.instance.buffP1 == 2 ? 4 : 3;
+        healthScript.maxHealth = maxHealth;
+        UpdateHeath(maxHealth);
     }
 
     private void FixedUpdate()
     {
-        if (currentInvulnaribilityDuration > 0)
+        if (currentInvulnaribilityDuration > 0 && health > 0)
         {
             currentInvulnaribilityDuration = Mathf.Max(currentInvulnaribilityDuration - Time.fixedDeltaTime, 0);
             float flickerDuration = 0.2f;

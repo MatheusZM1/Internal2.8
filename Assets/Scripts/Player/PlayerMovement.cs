@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Variables")]
     public bool isAlive;
     public float speed;
+    public float speedMultiplier;
     public float maxFallSpeed;
     public float gravity;
 
@@ -48,6 +49,9 @@ public class PlayerMovement : MonoBehaviour
     float coyoteTimer;
     float jumpBufferTimer;
 
+    bool doubleJumpEquipped;
+    bool canDoubleJump;
+
     [Header("Dashing")]
     public bool isDashing;
     public bool canDash;
@@ -60,12 +64,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Parry")]
     public float parryTimeLeft;
     public float parryDuration;
-
-    [Header("Reviving")]
-    public bool touchingOtherPlayer;
-    public float reviveTimer;
-    public LayerMask playerMask;
-    PlayerMovement otherPlayerScript;
 
     [Header("Lock")]
     public bool isLocked;
@@ -99,31 +97,22 @@ public class PlayerMovement : MonoBehaviour
         previousPosition = transform.position;
         currentPosition = transform.position;
 
+        startPos = transform.position;
+
         directionFacing.x = 1;
 
         bodyStartScale = bodyObj.size;
         eyeStartScale = leftEye.transform.localScale;
-
-        isAlive = true;
     }
 
     void Start()
     {
-        if (isPlayerTwo)
-        {
-            otherPlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
-        }
-        else
-        {
-            otherPlayerScript = GameObject.FindGameObjectWithTag("PlayerTwo").GetComponent<PlayerMovement>();
-        }
-
-        startPos = transform.position;
-
         if (isPlayerTwo && !GameManagerScript.instance.playerTwoExists) // Disable player 2 if only 1 player is connected
         {
             PlayerTwoConnects(false);
         }
+
+        Spawn();
 
         GameManagerScript.instance.StartLevel();
     }
@@ -176,11 +165,6 @@ public class PlayerMovement : MonoBehaviour
             if (!GameManagerScript.instance.gamePaused) GameManagerScript.instance.PauseGame();
         }
 
-        if (Input.GetKeyDown("r") && !isPlayerTwo)
-        {
-            Actions.levelReset?.Invoke();
-        }
-
         if (GameManagerScript.instance.gamePaused) return;
 
         if (isAlive)
@@ -210,8 +194,6 @@ public class PlayerMovement : MonoBehaviour
 
             Jump();
             Dash();
-            Parry();
-            //Revive();
         }
         else
         {
@@ -241,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
     void HandlePhysics()
     {
         float horizontalInput = horizontal > 0 ? Mathf.Ceil(horizontal) : Mathf.Floor(horizontal);
-        if (inputLockedCooldown <= 0) velocity.x = horizontalInput * speed * weaponScript.playerSpeedModifier; // x Speed
+        if (inputLockedCooldown <= 0) velocity.x = horizontalInput * speed * speedMultiplier * weaponScript.playerSpeedModifier; // x Speed
 
         if (isDashing) // Dash movement
         {
@@ -362,6 +344,7 @@ public class PlayerMovement : MonoBehaviour
         isJumping = false;
         coyoteTimer = coyoteTimerPreset;
         canDash = true;
+        canDoubleJump = doubleJumpEquipped;
 
         if (isAlive)
         {
@@ -387,8 +370,10 @@ public class PlayerMovement : MonoBehaviour
             if (!isDashing && inputLockedCooldown <= 0) jumpBufferTimer = jumpBufferTimerPreset;
         }
 
-        if (coyoteTimer > 0 && jumpBufferTimer > 0)
+        if ((coyoteTimer > 0 || (doubleJumpEquipped && canDoubleJump)) && jumpBufferTimer > 0)
         {
+            if (coyoteTimer <= 0) canDoubleJump = false;
+
             RaycastHit2D semiSolidGroundLeft = Physics2D.Raycast(transform.position + new Vector3(-bc.size.x * 0.49f, -bc.size.y * 0.45f), Vector2.down, 0.15f, semiSolidGroundMask);
             RaycastHit2D semiSolidGroundRight = Physics2D.Raycast(transform.position + new Vector3(bc.size.x * 0.49f, -bc.size.y * 0.45f), Vector2.down, 0.15f, semiSolidGroundMask);
             if ((semiSolidGroundLeft.collider != null || semiSolidGroundRight.collider != null) && vertical < 0) // Descend semi solid platform
@@ -446,38 +431,6 @@ public class PlayerMovement : MonoBehaviour
     {
         isDashing = false;
         currentDashCooldown = 0;
-    }
-
-    private void Parry()
-    {
-        if ((Input.GetKeyDown("w") && !isPlayerTwo) && inputLockedCooldown <= 0) // Parry
-        {
-
-        }
-    }
-
-    private void Revive()
-    {
-        if (touchingOtherPlayer)
-        {
-            if ((Input.GetKeyDown("w") || inputScript.GetActionDown("NorthB")) && inputLockedCooldown <= 0)
-            {
-                reviveTimer += Time.deltaTime;
-
-                if (reviveTimer >= 1)
-                {
-                    otherPlayerScript.Respawn();
-                }
-            }
-            else
-            {
-                reviveTimer = 0;
-            }
-        }
-        else
-        {
-            reviveTimer = 0;
-        }
     }
 
     void StopSquishBody()
@@ -562,6 +515,8 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
+        GetComponent<PlayerHP>().currentInvulnaribilityDuration = Mathf.Infinity;
+
         yield return new WaitForSeconds(0.25f);
 
         playersDead++;
@@ -575,18 +530,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void Respawn()
+    public void Spawn()
     {
-        if (isPlayerTwo && !GameManagerScript.instance.playerTwoExists) return;
-
         isAlive = true;
-        GetComponent<PlayerHP>().UpdateHeath(3);
-        GetComponent<PlayerHP>().currentInvulnaribilityDuration = 0.01f;
+        GetComponent<PlayerHP>().Init();
 
         transform.position = startPos;
         previousPosition = startPos;
         currentPosition = startPos;
         velocity = Vector2.zero;
+
+        directionFacing.x = 1;
 
         spriteObj.transform.position = startPos + Vector2.up * 0.3125f;
         bodyObj.transform.localPosition = Vector2.up * -0.25f;
@@ -597,6 +551,19 @@ public class PlayerMovement : MonoBehaviour
         tail.startColor = bodyObj.color;
         tail.endColor = bodyObj.color;
         tail.transform.GetComponent<TailRenderer>().ResetTail(transform.position);
+
+        if (!isPlayerTwo) speedMultiplier = LoadoutManager.instance.buffP1 == 1 ? 1.25f : 1f;
+        else speedMultiplier = LoadoutManager.instance.buffP2 == 1 ? 1.2f : 1f;
+
+        if (!isPlayerTwo) doubleJumpEquipped = LoadoutManager.instance.buffP1 == 3;
+        else doubleJumpEquipped = LoadoutManager.instance.buffP2 == 3;
+    }
+
+    public void Respawn()
+    {
+        if (isPlayerTwo && !GameManagerScript.instance.playerTwoExists) return;
+
+        Spawn();
 
         Actions.resetProjectiles?.Invoke();
         weaponScript.LoadWeapons();

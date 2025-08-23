@@ -18,7 +18,7 @@ public class LoadoutMenu : MonoBehaviour
     public GameObject masterContainer;
     public GameObject menuContainer;
     public GameObject weaponsContainer;
-    public GameObject relicsContainer;
+    public GameObject buffsContainer;
 
     [Header("Selection Info")]
     public int activeMenu;
@@ -40,9 +40,9 @@ public class LoadoutMenu : MonoBehaviour
     public Sprite[] weaponIconSprites;
     public SpriteRenderer[] weaponIcons;
 
-    [Header("Relics")]
-    public Sprite[] relicIconSprites;
-    public SpriteRenderer[] relicIcons;
+    [Header("Buffs")]
+    public Sprite[] buffIconSprites;
+    public SpriteRenderer[] buffIcons;
 
     private void OnEnable()
     {
@@ -98,7 +98,7 @@ public class LoadoutMenu : MonoBehaviour
                     break;
 
                 case 3:
-                    UpdateRelics();
+                    UpdateBuffs();
                     break;
             }
         }
@@ -110,13 +110,13 @@ public class LoadoutMenu : MonoBehaviour
         {
             menuIcons[0].sprite = weaponIconSprites[LoadoutManager.instance.primaryP1];
             menuIcons[1].sprite = weaponIconSprites[LoadoutManager.instance.secondaryP1];
-            //menuIcons[2].sprite = relicIconSprites[0];
+            menuIcons[2].sprite = buffIconSprites[LoadoutManager.instance.buffP1];
         }
         else
         {
             menuIcons[0].sprite = weaponIconSprites[LoadoutManager.instance.primaryP2];
             menuIcons[1].sprite = weaponIconSprites[LoadoutManager.instance.secondaryP2];
-            //menuIcons[2].sprite = relicIconSprites[0];
+            menuIcons[2].sprite = buffIconSprites[LoadoutManager.instance.buffP2];
         }
         equippedSprite.enabled = false;
     }
@@ -144,11 +144,6 @@ public class LoadoutMenu : MonoBehaviour
         {
             CloseLoadout();
             return;
-        }
-
-        if (inputInstance.GetActionDown("SouthB"))
-        {
-            Debug.Log("here");
         }
 
         if (inputInstance.selectDown) // Open selected menu
@@ -280,23 +275,25 @@ public class LoadoutMenu : MonoBehaviour
         }
     }
 
-    void UpdateRelics()
+    void UpdateBuffs()
     {
         if (movedHorizontalCooldown <= 0)
         {
             if (horizontal > 0)
             {
-                itemSelected = Mathf.Clamp(itemSelected + 1, 0, 0);
+                itemSelected = Mathf.Clamp(itemSelected + 1, 0, 3);
                 movedHorizontalCooldown = 0.25f;
+                UpdateBuffsText();
             }
             else if (horizontal < 0)
             {
-                itemSelected = Mathf.Clamp(itemSelected - 1, 0, 0);
+                itemSelected = Mathf.Clamp(itemSelected - 1, 0, 3);
                 movedHorizontalCooldown = 0.25f;
+                UpdateBuffsText();
             }
         }
 
-        //selectedSprite.transform.position = relicIcons[itemSelected].transform.position;
+        selectedSprite.transform.position = buffIcons[itemSelected].transform.position;
 
         if (inputInstance.backDown) // Return to menu
         {
@@ -304,7 +301,34 @@ public class LoadoutMenu : MonoBehaviour
             return;
         }
 
+        if (inputInstance.selectDown)
+        {
+            if (!isPlayerTwo) LoadoutManager.instance.SetSelectedBuffP1(itemSelected); // Temp cap as not all weapons are implemented
+            else LoadoutManager.instance.SetSelectedBuffP2(itemSelected);
+            equippedSprite.transform.position = buffIcons[itemSelected].transform.position;
+        }
+    }
 
+    void UpdateBuffsText()
+    {
+        switch (itemSelected)
+        {
+            case 0:
+                selectedText.GenerateText("\\c8Damage\\c0\nShots deal 10% more damage");
+                break;
+
+            case 1:
+                selectedText.GenerateText("\\c9Speed\\c0\nMovevement is 25% faster");
+                break;
+
+            case 2:
+                selectedText.GenerateText("\\c10Health\\c0\nStart with 1 extra hitpoint");
+                break;
+
+            case 3:
+                selectedText.GenerateText("\\c11Double Jump\\c0\nYou can jump twice");
+                break;
+        }
     }
 
     void OpenLoadout()
@@ -370,7 +394,7 @@ public class LoadoutMenu : MonoBehaviour
 
         menuContainer.SetActive(false);
         weaponsContainer.SetActive(false);
-        relicsContainer.SetActive(false);
+        buffsContainer.SetActive(false);
 
         equippedSprite.enabled = true;
 
@@ -380,6 +404,7 @@ public class LoadoutMenu : MonoBehaviour
                 menuContainer.SetActive(true);
                 isOpen = true;
                 UpdateMenuIcons();
+                UpdateMenuText();
                 break;
 
             case 1:
@@ -399,7 +424,11 @@ public class LoadoutMenu : MonoBehaviour
                 break;
 
             case 3:
-                relicsContainer.SetActive(true);
+                buffsContainer.SetActive(true);
+                if (!isPlayerTwo) itemSelected = LoadoutManager.instance.buffP1;
+                else itemSelected = LoadoutManager.instance.buffP2;
+                equippedSprite.transform.position = buffIcons[itemSelected].transform.position;
+                UpdateBuffsText();
                 break;
         }
 

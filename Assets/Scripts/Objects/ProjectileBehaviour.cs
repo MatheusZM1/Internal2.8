@@ -36,6 +36,7 @@ public class ProjectileBehaviour : MonoBehaviour
     [Header("Bullet Info")]
     public Vector2 velocity;
     public float currentDamage;
+    public float damageMultiplier;
     public float currentRange;
     public float currentDuration;
 

@@ -69,7 +69,7 @@ public class EnemyHP : MonoBehaviour
             ProjectileBehaviour projectileScript = other.GetComponent<ProjectileBehaviour>();
             if (projectileScript != null)
             {
-                TakeDamage(projectileScript.currentDamage);
+                TakeDamage(projectileScript.currentDamage * projectileScript.damageMultiplier);
                 projectileScript.CollideWithEnemy();
             }
 
